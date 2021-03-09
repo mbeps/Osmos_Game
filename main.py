@@ -1,11 +1,7 @@
 # Main place where the game will start. 
 # Other modules are called from here. 
 #^ MODULES:
-from interactions import Interaction
-from Entities.ball import Ball
-import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-from Game_Physics.Vector import Vector
-from Maps.map import *
+from modules import *
 
 #^ CONSTANTS:
 CANVAS_WIDTH = 800
