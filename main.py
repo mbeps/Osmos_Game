@@ -1,6 +1,13 @@
-# Main place where the game will start. 
-# Other modules are called from here. 
+
 #^ MODULES:
+        # import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+        # from Game_Physics.Vector import Vector
+        # from Entities.ball import Ball
+        # from Entities.player import Player
+        # from Entities.enemy import Enemy
+        # from Entities.mass import Mass
+        # from Maps.line import Line
+        # from interaction import Interaction
 from modules import *
 
 #^ CONSTANTS:
@@ -8,16 +15,17 @@ CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 500
 
 #^ MAIN:
-#^ Declaring Game Environment:
-lines = [Line(Vector(0, 0), Vector(0, CANVAS_HEIGHT)), 
-        Line(Vector(CANVAS_WIDTH, 0), Vector(CANVAS_WIDTH, CANVAS_HEIGHT)), 
-        Line(Vector(0, 0), Vector(CANVAS_WIDTH, 0)), 
-        Line(Vector(0, CANVAS_HEIGHT), Vector(CANVAS_WIDTH, CANVAS_HEIGHT))]
-enemies = [Ball(Vector(200, 300), Vector(-1, 2), 10, "blue"),
-        Ball(Vector(500, 150), Vector(3, -2), 15, "green")]
-interaction = Interaction(lines, enemies)
+#^ Setting Up Environment:
+balls = [Ball(Vector(400, 100), Vector(-3, -3), 10),
+        Ball(Vector(150, 100), Vector(4, -3), 15),
+        Ball(Vector(150, 300), Vector(5, 7), 20)]
+lines = [Line(Vector(0, 0), Vector(0, CANVAS_HEIGHT)), # Vertical 1
+        Line(Vector(0, 0), Vector(CANVAS_WIDTH, 0)), # Horizontal 1
+        Line(Vector(CANVAS_WIDTH, 0), Vector(CANVAS_WIDTH, CANVAS_HEIGHT)), # Vertical 2
+        Line(Vector(0, CANVAS_HEIGHT), Vector(CANVAS_WIDTH, CANVAS_HEIGHT))] # Horizontal 2
+interaction = Interaction(balls, lines)
 
-#^ Initialing Environment:
+#^ Setting Up Backend:
 frame = simplegui.create_frame("Domain", CANVAS_WIDTH, CANVAS_HEIGHT)
 frame.set_draw_handler(interaction.draw)
 frame.start()
