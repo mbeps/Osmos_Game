@@ -7,4 +7,4 @@ class Particle (Ball):
             Ball (Ball): super-class of Particle. 
         """
     def __init__ (self, position, velocity, radius, color):
-        super.__init__(position, velocity, radius, color) # Use the initializer from super-class
+        super().__init__(position, velocity, radius, color) # Use the initializer from super-class

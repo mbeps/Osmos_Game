@@ -7,7 +7,7 @@ class Player (Ball):
             Ball (Ball): super-class of Player. 
         """
     def __init__ (self, position, velocity, radius, color):
-        super.__init__(position, velocity, radius, color) # Use the initializer from super-class
+        super().__init__(position, velocity, radius, color) # Use the initializer from super-class
     
     def bounce(self, normal):
         return self.velocity.reflect(normal) # Bounce works by reflecting the ball in the normal
