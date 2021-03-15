@@ -147,6 +147,7 @@ class Interaction:
         
     def ballzup(self,canvas):
             global spc
+            ### code to ensure that the motes stay in the canvas
             for i in range(len(self.ballz)):
                     if self.ballz[i].pos.get_p()[0]+self.ballz[i].radius >= 1200 or self.ballz[i].pos.get_p()[0]-self.ballz[i].radius <= 0:
                         self.ballz[i].bounce(vector.Vector(1,0))
@@ -156,6 +157,8 @@ class Interaction:
                         self.ballz[i].update()
                     else:
                         self.ballz[i].update()
+            ###
+            #### code for eating and gravity combined (first if statement for grav)
             kill = []
             for i in range(len(self.ballz)):
                 for j in range(len(self.ballz)):
@@ -170,6 +173,8 @@ class Interaction:
                         kill.append(j)
                     else:
                         pass
+            ####
+            ##### loop for removing motes which were killed from canvas and adding new motes to the loop when below the set amount 
             for i in kill:
                 spc -= 1
                 ballz.pop(i)
@@ -180,13 +185,15 @@ class Interaction:
                     x +=1
                 else:
                     x += 1
-            if spc <= 10:
+            if spc <= 10:# set amount is set for less than 10? 
                 b = mote()
                 b.draw(canvas)
                 self.ballz.append(b)
                 spc +=1
             else:
                 pass
+            #####
+            
 
             
             
