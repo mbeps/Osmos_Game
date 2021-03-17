@@ -10,7 +10,7 @@ class Ball:
         self.position = position
         self.velocity = velocity
         self.radius = radius
-        self.colour = "green"
+        self.colour = "blue"
 
     def draw(self, canvas):
         """Draws ball and ball center.
@@ -22,6 +22,10 @@ class Ball:
             """
         canvas.draw_circle(self.position.get_p(), self.radius, 1, self.colour, self.colour) # Draws ball as circle
         canvas.draw_point(self.position.get_p(), self.colour) # Draws point as the center of the ball
+        """Adding sprites by overlay. 
+            This is more easily implemented as the removing circle will not break any dependencies. 
+            The image will dynamically change size as the circle size changes. 
+            """
     
     def bounce(self, normal):
         """Bounces the ball when wall is hit. 
@@ -39,3 +43,5 @@ class Ball:
             Position is update by repeately adding velocity to current position.
             """
         self.position.add(self.velocity) # Add the velocity to the current position to make the ball move
+
+    #£ Implement movement 

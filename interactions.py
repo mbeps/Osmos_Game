@@ -47,3 +47,6 @@ class Interaction:
             distance = ball.radius + (line.thickness / 2) # Sum of the wall thickness and wall size (radius)
             if line.distance(ball) < distance: # Collision if the current distance of center of ball and wall is less than the manimum distance 
                 ball.bounce(line.normal) # Call the bounce method from ball object
+
+    #£ Implement gravity 
+    #£ Implement balls engulfing 

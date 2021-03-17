@@ -21,7 +21,7 @@ class Line:
         canvas.draw_line(self.point_a.get_p(),
                          self.point_b.get_p(),
                          self.thickness,
-                         "red")
+                         "white")
 
     def distance_vector(self, position):
         """Uses shortest distance from center of ball to wall as Vector object 
