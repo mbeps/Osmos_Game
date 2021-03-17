@@ -8,3 +8,4 @@ from Entities.enemy import Enemy
 from Entities.mass import Mass
 from Maps.line import Line
 from interactions import Interaction
+from keyboard import Keyboard
