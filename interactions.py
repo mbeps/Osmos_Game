@@ -60,12 +60,31 @@ class Interaction:
                     self.collision(enemy, enemy2) # Check if there has been a collsion between 2 balls
 
     def collision(self, ball1, ball2):
+        """Detects collision between 2 balls:
+            Method computes the distance between the two centers of the balls. 
+            The distance is compared with the sum of the radii of the balls. 
+            If the distance between the centers is less than the sum of the radii then there has been a collision. 
+            
+            Method will call engulf method to so that the larger ball will engulf the smaller ball.  
+            Args:
+                ball1 (Ball): enemy
+                ball2 (Ball): can be enemy or player
+            """
         distance = ball1.position.copy().subtract(ball2.position)
         if distance.length() < (ball1.radius + ball2.radius):
             print("Collision")
             self.engulf(ball1, ball2)
 
     def engulf(self, ball1, ball2):
+        """Engulf ball. 
+            After collision.
+            The method checks which ball is larger by comparing the radii.
+            The radii of the smaller ball is incremented with the radii of the larger ball. 
+            The smaller ball should be removed (not implemented)
+            Args:
+                ball1 (Ball): main ball 
+                ball2 (Ball): can be enemy or player
+            """
         if ball1.radius > ball2.radius:
             ball1.set_radius(ball1.radius + ball2.radius)
             #£ Remove ball 2
