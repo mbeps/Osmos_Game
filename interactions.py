@@ -1,6 +1,8 @@
 
+from Game_Physics.Vector import Vector
+
 class Interaction:
-    def __init__(self, lines, player, enemy):
+    def __init__(self, lines, player, enemy, keyboard):
         """Manages interaction between objects in the game.
             Args:
                 lines (Line): walls of the game where balls bounce 
@@ -10,6 +12,7 @@ class Interaction:
         self.enemy = enemy
         self.lines = lines
         self.player = player
+        self.keyboard = keyboard
     
     def draw(self, canvas):
         """Draws each element in list of objects. 
@@ -42,14 +45,34 @@ class Interaction:
             For the the enemies, a loop will interate over the list and update each ball. 
             There is a single player which is updated normally. 
             """
+                #^ Update Player:
+        #^ Update Player:
+        self.player.update()
+        self.bounce(self.player)  
+        
         #^ Update Enemy:
         for enemy in self.enemy: # For each ball in the ball list
             enemy.update() # Update the ball (moves the ball)
             self.bounce(enemy) # Bounce the ball if there is a collsion 
-        
-        #^ Update Player:
-        self.player.update()
-        self.bounce(self.player)
+            self.collision(enemy, self.player) # Check collision with player
+            for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
+                if enemy != enemy2: # Only execute when the two balls are different.#* Same balls are always colliding
+                    self.collision(enemy, enemy2) # Check if there has been a collsion between 2 balls
+
+    def collision(self, ball1, ball2):
+        distance = ball1.position.copy().subtract(ball2.position)
+        if distance.length() < (ball1.radius + ball2.radius):
+            print("Collision")
+            self.engulf(ball1, ball2)
+
+    def engulf(self, ball1, ball2):
+        if ball1.radius > ball2.radius:
+            ball1.set_radius(ball1.radius + ball2.radius)
+            #£ Remove ball 2
+        else:
+            ball1.set_radius(ball2.radius + ball1.radius)
+            #£ Remove ball 1
+
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
