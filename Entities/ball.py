@@ -44,4 +44,8 @@ class Ball:
             """
         self.position.add(self.velocity) # Add the velocity to the current position to make the ball move
 
+    def set_radius(self, radius):
+        self.radius += radius
+    
+    
     #£ Implement movement 
