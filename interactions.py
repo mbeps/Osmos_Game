@@ -12,6 +12,7 @@ class Interaction:
         self.enemy = enemy
         self.lines = lines
         self.player = player
+        self.in_collsion = False
         self.keyboard = keyboard
     
     def draw(self, canvas):
@@ -54,26 +55,32 @@ class Interaction:
         for enemy in self.enemy: # For each ball in the ball list
             enemy.update() # Update the ball (moves the ball)
             self.bounce(enemy) # Bounce the ball if there is a collsion 
-            self.collision(enemy, self.player) # Check collision with player
+            
+            self.hit(enemy, self.player) # Check collision with player
+            
             for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
                 if enemy != enemy2: # Only execute when the two balls are different.#* Same balls are always colliding
-                    self.collision(enemy, enemy2) # Check if there has been a collsion between 2 balls
+                    if self.hit(enemy, enemy2): # Check if there has been a collsion between 2 balls
+                        self.engulf(enemy, enemy2) # If there has been a collsion then engulf method is called
 
-    def collision(self, ball1, ball2):
+
+    def hit(self, ball1, ball2):
         """Detects collision between 2 balls:
             Method computes the distance between the two centers of the balls. 
             The distance is compared with the sum of the radii of the balls. 
             If the distance between the centers is less than the sum of the radii then there has been a collision. 
             
             Method will call engulf method to so that the larger ball will engulf the smaller ball.  
+            
             Args:
                 ball1 (Ball): enemy
                 ball2 (Ball): can be enemy or player
+            Returns:
+                [Boolean]: whether a collision has occurred
             """
         distance = ball1.position.copy().subtract(ball2.position)
         if distance.length() < (ball1.radius + ball2.radius):
-            print("Collision")
-            self.engulf(ball1, ball2)
+            return True
 
     def engulf(self, ball1, ball2):
         """Engulf ball. 
@@ -85,13 +92,17 @@ class Interaction:
                 ball1 (Ball): main ball 
                 ball2 (Ball): can be enemy or player
             """
+        # Repetitive code 
         if ball1.radius > ball2.radius:
-            ball1.set_radius(ball1.radius + ball2.radius)
+            ball1.set_radius(ball1.radius + (ball2.radius)) # The sum of the radii is set to the radius of the larger ball using setter method
             #£ Remove ball 2
+            if ball2.type == "enemy": # If the smaller ball is an enemy 
+                self.enemy.remove(ball2) # The ball is removed from enemy list
         else:
-            ball1.set_radius(ball2.radius + ball1.radius)
+            ball1.set_radius(ball2.radius + ball1.radius) # The sum of the radii is set to the radius of the larger ball using setter method
             #£ Remove ball 1
-
+            if ball1.type == "enemy": # If the smaller ball is an enemy 
+                self.enemy.remove(ball1) # The ball is removed from enemy list
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
