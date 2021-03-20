@@ -33,7 +33,7 @@ class Line:
                 Vector: projection of the line between ball and wall
             """
         position_to_a = position.copy().subtract(self.point_a) # Shortest distance between ball and wall as vector
-        return position_to_a.get_proj(self.normal) # Modulus of the distance 
+        return (position_to_a.get_proj(self.normal)) # Modulus of the distance 
 
     def distance(self, ball):
         """Works out distance of the ball from ball as integer. 
@@ -43,4 +43,4 @@ class Line:
             Returns:
                 int: distance from ball to wall
             """
-        return self.distance_vector(ball.position).length() # Shortest distance between ball and wall as length
+        return (self.distance_vector(ball.position).length()) # Shortest distance between ball and wall as length
