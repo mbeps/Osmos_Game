@@ -63,7 +63,6 @@ class Interaction:
                     if self.hit(enemy, enemy2): # Check if there has been a collsion between 2 balls
                         self.engulf(enemy, enemy2) # If there has been a collsion then engulf method is called
 
-
     def hit(self, ball1, ball2):
         """Detects collision between 2 balls:
             Method computes the distance between the two centers of the balls. 
@@ -80,9 +79,10 @@ class Interaction:
             """
         distance = ball1.position.copy().subtract(ball2.position)
         if distance.length() < (ball1.radius + ball2.radius):
+            print("Collided")
             return True
 
-    def engulf(self, ball1, ball2):
+    def engulf(self, ball1, ball2): #! BUG: Engulf not working consistently. Sometimes does not increase size other times it gets huge
         """Engulf ball. 
             After collision.
             The method checks which ball is larger by comparing the radii.
@@ -94,11 +94,10 @@ class Interaction:
             """
         # Repetitive code 
         if ball1.radius > ball2.radius:
-            ball1.set_radius(ball1.radius + (ball2.radius)) # The sum of the radii is set to the radius of the larger ball using setter method
-            #£ Remove ball 2
+            ball1.set_radius(ball1.radius + ball2.radius) # The sum of the radii is set to the radius of the larger ball using setter method
             if ball2.type == "enemy": # If the smaller ball is an enemy 
                 self.enemy.remove(ball2) # The ball is removed from enemy list
-        else:
+        elif ball1.radius < ball2.radius:
             ball1.set_radius(ball2.radius + ball1.radius) # The sum of the radii is set to the radius of the larger ball using setter method
             #£ Remove ball 1
             if ball1.type == "enemy": # If the smaller ball is an enemy 
@@ -119,6 +118,3 @@ class Interaction:
             distance = ball.radius + (line.thickness / 2) # Sum of the wall thickness and wall size (radius)
             if line.distance(ball) < distance: # Collision if the current distance of center of ball and wall is less than the manimum distance 
                 ball.bounce(line.normal) # Call the bounce method from ball object
-    #£ Ball movement
-    #£ Implement gravity 
-    #£ Implement balls engulfing 
