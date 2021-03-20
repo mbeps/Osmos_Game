@@ -17,10 +17,11 @@ CANVAS_HEIGHT = 500
 #^ MAIN:
 #^ Setting Up Environment:
 keyboard = Keyboard()
-balls = [Enemy(Vector(400, 100), Vector(-3, -3), 10),
-        Enemy(Vector(150, 100), Vector(4, -3), 15),
-        Enemy(Vector(150, 300), Vector(5, 7), 10)]
-player = Player(Vector(150, 134), Vector(0, 0), 20)
+# balls = [Enemy(Vector(200, 100), Vector(-3, -3), 20), Enemy(Vector(700, 270), Vector(2,4), 30)]
+balls = [Enemy(Vector(1000, 1000), Vector(-3, -3), 20)]
+
+player = Player(Vector(300, 200), Vector(0, 0), 20)
+
 lines = [Line(Vector(0, 0), Vector(0, CANVAS_HEIGHT)), # Vertical 1
         Line(Vector(0, 0), Vector(CANVAS_WIDTH, 0)), # Horizontal 1
         Line(Vector(CANVAS_WIDTH, 0), Vector(CANVAS_WIDTH, CANVAS_HEIGHT)), # Vertical 2
@@ -30,4 +31,6 @@ interaction = Interaction(lines, player, balls, keyboard)
 #^ Setting Up Backend:
 frame = simplegui.create_frame("Domain", CANVAS_WIDTH, CANVAS_HEIGHT)
 frame.set_draw_handler(interaction.draw)
+frame.set_keydown_handler(keyboard.keyDown)
+frame.set_keyup_handler(keyboard.keyUp)
 frame.start()
