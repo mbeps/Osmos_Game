@@ -12,7 +12,7 @@ class Interaction:
         self.enemy = enemy
         self.lines = lines
         self.player = player
-        self.in_collsion = False
+        self.in_collision = False
         self.keyboard = keyboard
     
     def draw(self, canvas):
@@ -85,11 +85,11 @@ class Interaction:
             enemy.update() # Update the ball (moves the ball)
             self.bounce(enemy) # Bounce the ball if there is a collsion 
             
-            self.hit(enemy, self.player) # Check collision with player
+            self.hit_ball(enemy, self.player) # Check collision with player
             
             for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
                 if enemy != enemy2: # Only execute when the two balls are different.#* Same balls are always colliding
-                    if self.hit(enemy, enemy2): # Check if there has been a collsion between 2 balls
+                    if self.hit_ball(enemy, enemy2): # Check if there has been a collsion between 2 balls
                         self.engulf(enemy, enemy2) # If there has been a collsion then engulf method is called
 
     def update(self):
@@ -106,7 +106,7 @@ class Interaction:
         self.update_player()   
         self.update_enemy()
 
-    def hit(self, ball1, ball2):
+    def hit_ball(self, ball1, ball2):
         """Detects collision between 2 balls:
             Method computes the distance between the two centers of the balls. 
             The distance is compared with the sum of the radii of the balls. 
@@ -156,6 +156,7 @@ class Interaction:
             
             The ball is the super-class of enemy, player and mass.
             This method will work for any dub-classes of ball. 
+            
             Args:
                 ball (Ball): ball object which moves
             Calls: 
@@ -164,5 +165,8 @@ class Interaction:
             """
         for line in self.lines: # For each line in the line list
             distance = ball.radius + (line.thickness / 2) # Sum of the wall thickness and wall size (radius)
-            if line.distance(ball) < distance: # Collision if the current distance of center of ball and wall is less than the manimum distance 
+            if (line.distance(ball) < distance) and (self.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the manimum distance and collision not dealt with
                 ball.bounce(line.normal) # Call the bounce method from ball object
+                self.in_collision = True # Collision already dealt with therefore no sticky problem
+            else: # Where there is no collision
+                self.in_collision = False # When there is no collision then set to false so that bounce can happen later

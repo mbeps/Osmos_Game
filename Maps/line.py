@@ -15,9 +15,9 @@ class Line:
     def draw(self, canvas):
         """Draws line as wall. 
             Takes start point and end point as argument to draw the line between given point. Thickess and colour are also added.  
-        Args:
-            canvas (Canvas): where the game play takes place
-        """
+            Args:
+                canvas (Canvas): where the game play takes place
+            """
         canvas.draw_line(self.point_a.get_p(),
                          self.point_b.get_p(),
                          self.thickness,
