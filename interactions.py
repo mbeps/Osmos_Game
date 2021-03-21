@@ -45,24 +45,33 @@ class Interaction:
             
             Keyboard controls are used to control the player. 
             When a key is pressed, the appropriate velocity according to the direction is incremented. 
+            This is handled by the player_control() method. 
 
             There is a single player which is updated normally. 
 
             Calls:
                 Player.update(): handles updating the position of the player object. 
                 bounce(): handles the updating the velocity of the player upon collision with wall. 
-        """
+                player_control(): moves the player using keypresses by updating the position. 
+            """
         self.player.update()
         self.bounce(self.player)  
+        self.player_controls()
 
-        #^ Keyboard Controls: 
-        if self.keyboard.right: #* Right
+    def player_controls(self):
+        """Moves the player according the key being pressed. 
+            Depending the key being pressed, the velocity is incremented on the specific axes. 
+            There is a limit for how fast the player can travel. 
+            Once this speed limit is reached, the velocity will not be incremented. 
+            """
+        velocity_limit = 15
+        if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit): #* Right
             self.player.velocity.add(Vector(1, 0))
-        if self.keyboard.left: #* Left
+        if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit): #* Left
             self.player.velocity.add(Vector(-1,0))
-        if self.keyboard.up: #* Up
+        if (self.keyboard.up) and (self.player.velocity.get_p()[1] > -velocity_limit): #* Up
             self.player.velocity.add(Vector(0,-1))
-        if self.keyboard.down: #* Down 
+        if (self.keyboard.down) and (self.player.velocity.get_p()[1] < velocity_limit): #* Down 
             self.player.velocity.add(Vector(0,+1))
 
     def update_enemy(self):
@@ -150,9 +159,14 @@ class Interaction:
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
-            The distance is from the center of the ball to the center of the wall. 
+            The maximum distance is from the center of the ball to the center of the wall. 
             The distance between the center and wall is computed to check if there was a collision. 
-            If the distance is less than the sum of the radius of the ball and the half the thickness of the wall. 
+            If the distance between the wall and the ball is less than the maximum distance then there has been a collision. 
+
+            in_collision variable keeps track of whether there has been a collision before. 
+            This is done to prevent the sticky problem where the ball is stuck in the wall. 
+            If there is a previous collision and another one happens at the same time, then collision is not handles therefore no bounce. 
+            After the collision takes place and there is no other collision, then the variable is set to false so that the next collision can be handled. 
             
             The ball is the super-class of enemy, player and mass.
             This method will work for any dub-classes of ball. 
@@ -164,7 +178,7 @@ class Interaction:
                 Ball.bounce(line.normal): reflect the velocity of the ball along normal to simulate a bounce. 
             """
         for line in self.lines: # For each line in the line list
-            distance = ball.radius + (line.thickness / 2) # Sum of the wall thickness and wall size (radius)
+            distance = ball.radius + (line.thickness / 2) + 1 # Sum of the wall thickness and wall size (radius)
             if (line.distance(ball) < distance) and (self.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the manimum distance and collision not dealt with
                 ball.bounce(line.normal) # Call the bounce method from ball object
                 self.in_collision = True # Collision already dealt with therefore no sticky problem
