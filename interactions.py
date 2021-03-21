@@ -2,8 +2,11 @@
 from Game_Physics.Vector import Vector
 
 class Interaction:
+    """Handles the interactions between game objects. 
+        """
     def __init__(self, lines, player, enemy, keyboard):
-        """Manages interaction between objects in the game.
+        """Initializes interacation object to handle interactions between game objects.
+            
             Args:
                 lines (Line): walls of the game where balls bounce 
                 player (Ball): player of the game
@@ -20,8 +23,10 @@ class Interaction:
             Multiple objects such as balls and walls are stored in list for better management.
             Each element in the list is iterated over and drawn. 
             Update method called to update objects every second. 
+            
             Args:
                 canvas (Canvas): where the gameplay takes place. 
+            
             Calls:
                 update(): used to update the state and position of the balls. 
             """
@@ -140,9 +145,11 @@ class Interaction:
             The method checks which ball is larger by comparing the radii.
             The radii of the smaller ball is incremented with the radii of the larger ball. 
             The smaller ball should be removed (not implemented)
+            
             Args:
                 ball1 (Ball): main ball.
                 ball2 (Ball): can be enemy or player.
+            
             Calls:
                 Ball.set_radius(sum): increases the size of the ball by setting the sum of the two balls to the bigger one. 
             """
@@ -173,6 +180,7 @@ class Interaction:
             
             Args:
                 ball (Ball): ball object which moves
+            
             Calls: 
                 lines(distance): works out the distance between the ball object (player, enemy). 
                 Ball.bounce(line.normal): reflect the velocity of the ball along normal to simulate a bounce. 
