@@ -17,8 +17,8 @@ CANVAS_HEIGHT = 500
 #^ MAIN:
 #^ Setting Up Environment:
 keyboard = Keyboard()
-# balls = [Enemy(Vector(200, 100), Vector(-3, -3), 20), Enemy(Vector(700, 270), Vector(2,4), 30)]
-balls = [Enemy(Vector(1000, 1000), Vector(-3, -3), 20)]
+balls = [Enemy(Vector(200, 100), Vector(-3, -3), 20), Enemy(Vector(700, 270), Vector(2,4), 30)]
+# balls = [Enemy(Vector(1000, 1000), Vector(-3, -3), 20)]
 
 player = Player(Vector(300, 200), Vector(0, 0), 20)
 

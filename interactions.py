@@ -17,7 +17,8 @@ class Interaction:
         self.player = player
         self.in_collision = False
         self.keyboard = keyboard
-    
+
+    #^ Draw:  
     def draw(self, canvas):
         """Draws each element in list of objects. 
             Multiple objects such as balls and walls are stored in list for better management.
@@ -43,6 +44,7 @@ class Interaction:
         #^ Draw Player
         self.player.draw(canvas)
     
+    #^ Update:
     def update_player(self):
         """Update the player. 
             Method handles updating the position of the player and bouncing upon collision with walls. 
@@ -69,7 +71,7 @@ class Interaction:
             There is a limit for how fast the player can travel. 
             Once this speed limit is reached, the velocity will not be incremented. 
             """
-        velocity_limit = 15
+        velocity_limit = 10
         if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit): #* Right
             self.player.velocity.add(Vector(1, 0))
         if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit): #* Left
@@ -103,6 +105,7 @@ class Interaction:
             
             for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
                 if enemy != enemy2: # Only execute when the two balls are different.#* Same balls are always colliding
+                    self.gravity(enemy, enemy2) # Gravity acts on the balls
                     if self.hit_ball(enemy, enemy2): # Check if there has been a collsion between 2 balls
                         self.engulf(enemy, enemy2) # If there has been a collsion then engulf method is called
 
@@ -120,6 +123,36 @@ class Interaction:
         self.update_player()   
         self.update_enemy()
 
+    #^ Mechanics:
+    def gravity(self, ball1, ball2):
+        """Gravity method attracts the smaller ball towards the bigger ball. 
+            The method compares the radii of the two balls to find out the smaller and larger ball. 
+            Gravity will act on the smaller ball when it is within a certain range of the bigger ball. 
+            The velocity of both balls changes. 
+            However, the velocity of the smaller ball changes more drastically than the bigger one. 
+            The gravitation force of the smaller ball on the lager one us 5 times weaker. 
+
+            Gravitational force dictates the strength of the gravity.
+            The distance is computed by comparing the centers of the two balls which is used to check if smaller ball is within the range.  
+
+            Args:
+                ball1 (Ball): one of the balls on which gravity could act on
+                ball2 (Ball): one of the balls on which gravity could act on
+            """
+        gravitational_force = 700 # Smaller means stronger
+        distance_between_balls = int((ball1.position.copy().subtract(ball2.position)).length())
+        larger_ball = ball1 
+        smaller_ball = ball2 # Gravity acts on the smaller ball
+
+        if ball1.radius < ball2.radius: # Works out the larger and smaller ball 
+            larger_ball = ball2
+            smaller_ball = ball2
+        gravity_distance = larger_ball.radius * 5
+        
+        if (distance_between_balls < (gravity_distance)): # Gravity acts when the smaller ball is inside the gravitational range of the bigger ball
+            smaller_ball.velocity.add((larger_ball.position - smaller_ball.position).divide(gravitational_force)) # Smaller ball velocity changed
+            larger_ball.velocity.add((smaller_ball.position - larger_ball.position).divide(gravitational_force * 5)) # Bigger ball velocity changed (5 times weaker)
+    
     def hit_ball(self, ball1, ball2):
         """Detects collision between 2 balls:
             Method computes the distance between the two centers of the balls. 
@@ -135,8 +168,7 @@ class Interaction:
                 [Boolean]: whether a collision has occurred
             """
         distance = ball1.position.copy().subtract(ball2.position)
-        if distance.length() < (ball1.radius + ball2.radius):
-            print("Collided")
+        if (distance.length() < (ball1.radius + ball2.radius)):
             return True
 
     def engulf(self, ball1, ball2): #! BUG: Engulf not working consistently. Sometimes does not increase size other times it gets huge
