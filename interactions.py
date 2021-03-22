@@ -171,13 +171,14 @@ class Interaction:
         if (distance.length() < (ball1.radius + ball2.radius)):
             return True
 
-    def engulf(self, ball1, ball2): #! BUG: Engulf not working consistently. Sometimes does not increase size other times it gets huge
+    def engulf(self, ball1, ball2):
         """Engulf ball. 
             After collision.
-            The method checks which ball is larger by comparing the radii.
-            The radii of the smaller ball is incremented with the radii of the larger ball. 
-            The smaller ball should be removed (not implemented)
-            
+            The sum of the radii is computed and stored in variable to be set later. 
+            Half the sum of radii is set to the ball as balls get large to quickly. 
+            The second ball is removed from the enemies list therefore erased from the game. 
+            The size of the ball does not have to be compared as the final action is the same. 
+ 
             Args:
                 ball1 (Ball): main ball.
                 ball2 (Ball): can be enemy or player.
@@ -185,16 +186,13 @@ class Interaction:
             Calls:
                 Ball.set_radius(sum): increases the size of the ball by setting the sum of the two balls to the bigger one. 
             """
-        #! Repetitive code 
-        if ball1.radius > ball2.radius:
-            ball1.set_radius(ball1.radius + ball2.radius) # The sum of the radii is set to the radius of the larger ball using setter method
-            if ball2.type == "enemy": # If the smaller ball is an enemy 
-                self.enemy.remove(ball2) # The ball is removed from enemy list
-        elif ball1.radius < ball2.radius:
-            ball1.set_radius(ball2.radius + ball1.radius) # The sum of the radii is set to the radius of the larger ball using setter method
-            #£ Remove ball 1
-            if ball1.type == "enemy": # If the smaller ball is an enemy 
-                self.enemy.remove(ball1) # The ball is removed from enemy list
+        sum_radii = ball1.radius + ball2.radius
+
+        ball1.set_radius(sum_radii / 2) # Half the sum of the balls set to ball 1
+        if (ball2.type == "enemy"): # If the second ball is enemy than it is removed from player list
+            self.enemy.remove(ball2) # The ball is removed from enemy list
+        elif (ball2.type == "player"):
+            pass # Player looses (not implemented)
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
