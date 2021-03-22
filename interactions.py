@@ -95,6 +95,7 @@ class Interaction:
                 Enemy.update(): handles updating the position of the enemy object. 
                 bounce(enemy): handles the updating the velocity of the enemy upon collision with wall. 
                 hit(enemy, enemy2): detects collision of the enemy with another ball (enemy, player).
+                gravity(ball1, ball2): attracts two balls together. 
                 engult(enemy, enemy2): once there has been a collision, bigger ball will engult the smaller ball. 
             """
         for enemy in self.enemy: # For each ball in the ball list
@@ -192,6 +193,7 @@ class Interaction:
         larger_ball = ball1 
         smaller_ball = ball2 # Gravity acts on the smaller ball
 
+        #! Adding of statement makes the method inconsistent
         if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
             larger_ball = ball2
             smaller_ball = ball2

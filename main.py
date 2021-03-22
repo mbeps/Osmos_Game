@@ -20,9 +20,9 @@ keyboard = Keyboard()
 balls = [Enemy(Vector(200, 100), Vector(-3, -3), 20), 
         Enemy(Vector(700, 270), Vector(2,4), 30),
         Enemy(Vector(400, 160), Vector(-2, 1), 10)]
-# balls = [Enemy(Vector(1000, 1000), Vector(-3, -3), 20)]
+# balls = [Enemy(Vector(400, 300), Vector(-1, -1), 10)]
 
-player = Player(Vector(300, 200), Vector(0, 0), 20)
+player = Player(Vector(700, 200), Vector(0, 0), 15)
 
 lines = [Line(Vector(0, 0), Vector(0, CANVAS_HEIGHT)), # Vertical 1
         Line(Vector(0, 0), Vector(CANVAS_WIDTH, 0)), # Horizontal 1

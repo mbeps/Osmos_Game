@@ -57,7 +57,7 @@ class Ball:
     def set_radius(self, radius):
         """Set a new radius size for current object. 
 
-        Args:
-            radius (int): new radius size that needs to be assigned. 
-        """
+            Args:
+                radius (int): new radius size that needs to be assigned. 
+            """
         self.radius += radius
