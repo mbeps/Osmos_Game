@@ -71,7 +71,7 @@ class Interaction:
             There is a limit for how fast the player can travel. 
             Once this speed limit is reached, the velocity will not be incremented. 
             """
-        velocity_limit = 10
+        velocity_limit = 5
         if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit): #* Right
             self.player.velocity.add(Vector(1, 0))
         if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit): #* Left
@@ -99,15 +99,16 @@ class Interaction:
             """
         for enemy in self.enemy: # For each ball in the ball list
             enemy.update() # Update the ball (moves the ball)
-            self.bounce(enemy) # Bounce the ball if there is a collsion 
+            self.bounce(enemy) # Bounce the ball if there is a collision 
             
-            self.hit_ball(enemy, self.player) # Check collision with player
+            if self.hit_ball(self.player, enemy):
+                self.engulf(self.player, enemy) # Check if there has been a collision between player and enemy
             
             for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
                 if enemy != enemy2: # Only execute when the two balls are different.#* Same balls are always colliding
                     self.gravity(enemy, enemy2) # Gravity acts on the balls
-                    if self.hit_ball(enemy, enemy2): # Check if there has been a collsion between 2 balls
-                        self.engulf(enemy, enemy2) # If there has been a collsion then engulf method is called
+                    if self.hit_ball(enemy, enemy2): # Check if there has been a collision between 2 enemies
+                        self.engulf(enemy, enemy2) # If there has been a collision then engulf method is called
 
     def update(self):
         """Updates balls in the list. 
@@ -144,7 +145,7 @@ class Interaction:
         larger_ball = ball1 
         smaller_ball = ball2 # Gravity acts on the smaller ball
 
-        if ball1.radius < ball2.radius: # Works out the larger and smaller ball 
+        if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
             larger_ball = ball2
             smaller_ball = ball2
         gravity_distance = larger_ball.radius * 5
@@ -175,9 +176,9 @@ class Interaction:
         """Engulf ball. 
             After collision.
             The sum of the radii is computed and stored in variable to be set later. 
-            Half the sum of radii is set to the ball as balls get large to quickly. 
+            A fraction of the sum of radii is set to the ball as balls get large to quickly. 
             The second ball is removed from the enemies list therefore erased from the game. 
-            The size of the ball does not have to be compared as the final action is the same. 
+            The size of the balls are compared and assigned to variables to make code more dynamic. 
  
             Args:
                 ball1 (Ball): main ball.
@@ -188,11 +189,18 @@ class Interaction:
             """
         sum_radii = ball1.radius + ball2.radius
 
-        ball1.set_radius(sum_radii / 2) # Half the sum of the balls set to ball 1
-        if (ball2.type == "enemy"): # If the second ball is enemy than it is removed from player list
-            self.enemy.remove(ball2) # The ball is removed from enemy list
-        elif (ball2.type == "player"):
-            pass # Player looses (not implemented)
+        larger_ball = ball1 
+        smaller_ball = ball2 # Gravity acts on the smaller ball
+
+        if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
+            larger_ball = ball2
+            smaller_ball = ball2
+
+        larger_ball.set_radius(sum_radii / 5) # Half the sum of the balls set to ball 1
+        if (smaller_ball.type == "enemy"): # If the second ball is enemy than it is removed from player list
+            self.enemy.remove(smaller_ball) # The ball is removed from enemy list
+        elif (smaller_ball.type == "player"):
+            print("Player Lost")
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
