@@ -4,7 +4,7 @@ from Game_Physics.Vector import Vector
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines, player, enemy, keyboard):
+    def __init__(self, lines, player, enemy, keyboard, frame):
         """Initializes interacation object to handle interactions between game objects.
             
             Args:
@@ -18,12 +18,15 @@ class Interaction:
         self.in_collision = False
         self.keyboard = keyboard
         self.kill_counter = 0
+        self.frame = frame
 
     #^ Draw:  
     def draw(self, canvas):
         """Draws each element in list of objects. 
             Multiple objects such as balls and walls are stored in list for better management.
             Each element in the list is iterated over and drawn. 
+            Player is a single object so it is drawn normally. 
+            Score draws some text showing the kills from the player and the size in radius. 
             Update method called to update objects every second. 
             
             Args:
@@ -121,15 +124,19 @@ class Interaction:
         """Updates balls in the list. 
             This method handles updating the enemies stored in the enemy list and the single player. 
             Each ball (player, enemy and mass) stored is an object. 
-            To update the player, @update_player() is called. 
-            To update the enemies, @update_enemy() is called.  
+            Enemies and players are updated by colling their respective update method. 
+            
+            Function to check if game is over is called for checking.
+            This function checks whether the game is over and executes the appropriate actions. 
 
             Calls:
                 update_player(): handles updating position and state of the player. 
-                update_enemy(): handles updating position and state of the enemy
+                update_enemy(): handles updating position and state of the enemy.
+                game_finish(): checks whether the game is over (if player has lost or won). 
             """
         self.update_player()   
         self.update_enemy()
+        self.game_finish()
 
     #^ Mechanics:
     def gravity(self, ball1, ball2):
@@ -208,11 +215,11 @@ class Interaction:
 
         #^ Erasing Engulfed Ball
         larger_ball.set_radius(sum_radii / 5) # Fraction of the sum of the balls set to ball 1
-        if (smaller_ball.type == "enemy"): # If the second ball is enemy than it is removed from player list
+        if (smaller_ball.type == "enemy"): # If the ball eaten (smaller ball) was the enemy
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
             self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
-        elif (smaller_ball.type == "player"):
-            print("Player Lost") #£ Implement the lost method
+        elif (smaller_ball.type == "player"): # If the ball eaten (smaller ball) was the player
+            self.player.alive = False # A method will check this and terminate the game
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
@@ -242,3 +249,27 @@ class Interaction:
                 self.in_collision = True # Collision already dealt with therefore no sticky problem
             else: # Where there is no collision
                 self.in_collision = False # When there is no collision then set to false so that bounce can happen later
+
+    #^ Game:
+    def game_finish(self):
+        """Handles the end of game.
+            Detects whether the game is finished. 
+            Once the game is finished, the game will be terminated and the appropriate message will be displayed. 
+            This is done by checking whether all the enemies are dead or the player is dead. 
+            
+            To check if all the enemies are dead, the size of the list which contains the enemies us checked.
+            If the length of the list is 0 (empty list) then all the enemies are dead and the player has won. 
+
+            To check if the player is dead, the field which keeps track if it alive is checked. 
+            If the field 'alive' is false, then the player is dead and therefore has lost. 
+
+        """
+        if (len(self.enemy) == 0):
+            self.frame.stop()
+            print("Win")
+        elif (self.player.alive == False):
+            self.frame.stop()
+            print("Game Over. You Lost")
+
+# A bug is present where the enemies will infinitely get larger if the plater is eaten.
+# Terminating the game is a workaround. 

@@ -12,3 +12,4 @@ class Player (Ball):
         super().__init__(position, velocity, radius) # Use the initializer from super-class
         self.type = "player"
         self.colour = "green"
+        self.alive = True
