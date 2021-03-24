@@ -19,6 +19,8 @@ class Interaction:
         self.keyboard = keyboard
         self.kill_counter = 0
         self.frame = frame
+        self.time_limit = 60 # The limit for which the game will run 
+        self.time_count = 0 # Counts how many times method is called. Used for computing one second. 
 
     #^ Draw:  
     def draw(self, canvas):
@@ -137,6 +139,18 @@ class Interaction:
         self.update_player()   
         self.update_enemy()
         self.game_finish()
+        self.countdown()
+
+    def countdown(self):
+        """Counts down the timer set.
+            Uses the counter to keep track of how many times the method is called. 
+            The modulus is used to compute one second based on the counter.
+            For every second, the time limit is decremented. 
+            """
+        self.time_count += 1
+        if ((self.time_count % 60) == 0):
+            self.time_limit -= 1
+            print(self.time_limit)
 
     #^ Mechanics:
     def gravity(self, ball1, ball2):
@@ -266,10 +280,13 @@ class Interaction:
         """
         if (len(self.enemy) == 0):
             self.frame.stop()
-            print("Win")
+            print("You Won")
         elif (self.player.alive == False):
             self.frame.stop()
             print("Game Over. You Lost")
+        elif (self.time_limit == 0):
+            self.frame.stop()
+            print("Ran Out of Time. You Lost")
 
 # A bug is present where the enemies will infinitely get larger if the plater is eaten.
 # Terminating the game is a workaround. 
