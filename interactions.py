@@ -17,6 +17,7 @@ class Interaction:
         self.player = player
         self.in_collision = False
         self.keyboard = keyboard
+        self.kill_counter = 0
 
     #^ Draw:  
     def draw(self, canvas):
@@ -205,8 +206,10 @@ class Interaction:
         larger_ball.set_radius(sum_radii / 5) # Fraction of the sum of the balls set to ball 1
         if (smaller_ball.type == "enemy"): # If the second ball is enemy than it is removed from player list
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
+            self.kill_counter += 1
+            print(f'Kills: {self.kill_counter}      Size: {self.player.radius}')
         elif (smaller_ball.type == "player"):
-            print("Player Lost")
+            print("Player Lost") #£ Implement the lost method
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 
