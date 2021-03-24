@@ -15,11 +15,19 @@ CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 500
 
 #^ FUNCTIONS:
+def set_time():
+	"""Allows the user select the time limit. 
+		Takes the input from the user and returns in as integer. 
 
+		Returns:
+			(int): time limit
+		"""
+	return (int(input("Time Limit (secs): ")))
 
 #^ MAIN:
 #^ Setting Up Environment:
 keyboard = Keyboard()
+time_limit = set_time()
 balls = [Enemy(Vector(200, 100), Vector(-3, -3), 15), 
         Enemy(Vector(700, 270), Vector(2,4), 20),
         Enemy(Vector(400, 160), Vector(-2, 1), 10),
@@ -32,7 +40,7 @@ lines = [Line(Vector(0, 0), Vector(0, CANVAS_HEIGHT)), # Vertical 1
         Line(Vector(0, 0), Vector(CANVAS_WIDTH, 0)), # Horizontal 1
         Line(Vector(CANVAS_WIDTH, 0), Vector(CANVAS_WIDTH, CANVAS_HEIGHT)), # Vertical 2
         Line(Vector(0, CANVAS_HEIGHT), Vector(CANVAS_WIDTH, CANVAS_HEIGHT))] # Horizontal 2
-interaction = Interaction(lines, player, balls, 20, keyboard, frame)
+interaction = Interaction(lines, player, balls, time_limit, keyboard, frame)
 
 #^ Setting Up Backend:
 frame.set_draw_handler(interaction.draw)
