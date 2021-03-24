@@ -102,9 +102,11 @@ class Interaction:
             enemy.update() # Update the ball (moves the ball)
             self.bounce(enemy) # Bounce the ball if there is a collision 
             
+            #^ Checking Collision with Player
             if self.hit_ball(self.player, enemy):
                 self.engulf(self.player, enemy) # Check if there has been a collision between player and enemy
             
+            #^ Checking Collision with other Enemy
             for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
                 if enemy != enemy2: # Only execute when the two balls are different.#* Same balls are always colliding
                     self.gravity(enemy, enemy2) # Gravity acts on the balls
@@ -146,11 +148,13 @@ class Interaction:
         larger_ball = ball1 
         smaller_ball = ball2 # Gravity acts on the smaller ball
 
+        #^ Computing Larger & Smaller Ball
         if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
             larger_ball = ball2
             smaller_ball = ball2
         gravity_distance = larger_ball.radius * 5
         
+        #^ Gravity
         if (distance_between_balls < (gravity_distance)): # Gravity acts when the smaller ball is inside the gravitational range of the bigger ball
             smaller_ball.velocity.add((larger_ball.position - smaller_ball.position).divide(gravitational_force)) # Smaller ball velocity changed
             larger_ball.velocity.add((smaller_ball.position - larger_ball.position).divide(gravitational_force * 5)) # Bigger ball velocity changed (5 times weaker)
@@ -189,16 +193,16 @@ class Interaction:
                 Ball.set_radius(sum): increases the size of the ball by setting the sum of the two balls to the bigger one. 
             """
         sum_radii = ball1.radius + ball2.radius
-
         larger_ball = ball1 
-        smaller_ball = ball2 # Gravity acts on the smaller ball
+        smaller_ball = ball2 
 
-        #! Adding of statement makes the method inconsistent
+        #^ Computing Larger & Smaller Ball
         if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
             larger_ball = ball2
-            smaller_ball = ball2
+            smaller_ball = ball1
 
-        larger_ball.set_radius(sum_radii / 5) # Half the sum of the balls set to ball 1
+        #^ Erasing Engulfed Ball
+        larger_ball.set_radius(sum_radii / 5) # Fraction of the sum of the balls set to ball 1
         if (smaller_ball.type == "enemy"): # If the second ball is enemy than it is removed from player list
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
         elif (smaller_ball.type == "player"):
@@ -222,7 +226,7 @@ class Interaction:
                 ball (Ball): ball object which moves
             
             Calls: 
-                lines(distance): works out the distance between the ball object (player, enemy). 
+                Line.distance(ball): works out the distance between the ball object (player, enemy). 
                 Ball.bounce(line.normal): reflect the velocity of the ball along normal to simulate a bounce. 
             """
         for line in self.lines: # For each line in the line list
