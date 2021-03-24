@@ -44,6 +44,9 @@ class Interaction:
         
         #^ Draw Player
         self.player.draw(canvas)
+
+        #^ Draw Text (Score):
+        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}', (20, 13), 20, "Green")
     
     #^ Update:
     def update_player(self):
@@ -184,7 +187,8 @@ class Interaction:
             The sum of the radii is computed and stored in variable to be set later. 
             A fraction of the sum of radii is set to the ball as balls get large to quickly. 
             The second ball is removed from the enemies list therefore erased from the game. 
-            The size of the balls are compared and assigned to variables to make code more dynamic. 
+            The size of the balls are compared and assigned to variables to make code more dynamic.
+            When the player engulfs an enemy, then the kill counter is incremented and as mentioned before enemy is removed.  
  
             Args:
                 ball1 (Ball): main ball.
@@ -206,8 +210,7 @@ class Interaction:
         larger_ball.set_radius(sum_radii / 5) # Fraction of the sum of the balls set to ball 1
         if (smaller_ball.type == "enemy"): # If the second ball is enemy than it is removed from player list
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
-            self.kill_counter += 1
-            print(f'Kills: {self.kill_counter}      Size: {self.player.radius}')
+            self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
         elif (smaller_ball.type == "player"):
             print("Player Lost") #£ Implement the lost method
 
