@@ -4,7 +4,7 @@ from Game_Physics.Vector import Vector
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines, player, enemy, keyboard, frame):
+    def __init__(self, lines, player, enemy, time, keyboard, frame):
         """Initializes interacation object to handle interactions between game objects.
             
             Args:
@@ -19,7 +19,7 @@ class Interaction:
         self.keyboard = keyboard
         self.kill_counter = 0
         self.frame = frame
-        self.time_limit = 60 # The limit for which the game will run 
+        self.time_limit = time # The limit for which the game will run 
         self.time_count = 0 # Counts how many times method is called. Used for computing one second. 
 
     #^ Draw:  
@@ -51,7 +51,7 @@ class Interaction:
         self.player.draw(canvas)
 
         #^ Draw Text (Score):
-        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}', (20, 13), 20, "Green")
+        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}       Time: {self.time_limit}', (20, 13), 18, "Green")
     
     #^ Update:
     def update_player(self):
@@ -150,7 +150,6 @@ class Interaction:
         self.time_count += 1
         if ((self.time_count % 60) == 0):
             self.time_limit -= 1
-            print(self.time_limit)
 
     #^ Mechanics:
     def gravity(self, ball1, ball2):

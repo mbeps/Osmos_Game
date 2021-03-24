@@ -15,8 +15,7 @@ CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 500
 
 #^ FUNCTIONS:
-def exit_game():
-    frame.stop()
+
 
 #^ MAIN:
 #^ Setting Up Environment:
@@ -33,12 +32,11 @@ lines = [Line(Vector(0, 0), Vector(0, CANVAS_HEIGHT)), # Vertical 1
         Line(Vector(0, 0), Vector(CANVAS_WIDTH, 0)), # Horizontal 1
         Line(Vector(CANVAS_WIDTH, 0), Vector(CANVAS_WIDTH, CANVAS_HEIGHT)), # Vertical 2
         Line(Vector(0, CANVAS_HEIGHT), Vector(CANVAS_WIDTH, CANVAS_HEIGHT))] # Horizontal 2
-interaction = Interaction(lines, player, balls, keyboard, frame)
+interaction = Interaction(lines, player, balls, 20, keyboard, frame)
 
 #^ Setting Up Backend:
-
 frame.set_draw_handler(interaction.draw)
 frame.set_keydown_handler(keyboard.keyDown)
 frame.set_keyup_handler(keyboard.keyUp)
-frame.add_button("Exit Game", exit_game)
+frame.add_button("Exit Game", frame.stop)
 frame.start()

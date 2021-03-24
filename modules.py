@@ -1,6 +1,7 @@
 """List of all modules needed in main
     """
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+import random
 from Game_Physics.Vector import Vector
 from Entities.ball import Ball
 from Entities.player import Player
