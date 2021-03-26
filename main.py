@@ -1,13 +1,13 @@
 
 #^ MODULES:
-        # import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-        # from Game_Physics.Vector import Vector
-        # from Entities.ball import Ball
-        # from Entities.player import Player
-        # from Entities.enemy import Enemy
-        # from Entities.mass import Mass
-        # from Maps.line import Line
-        # from interaction import Interaction
+	# import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+	# from Game_Physics.Vector import Vector
+	# from Entities.ball import Ball
+	# from Entities.player import Player
+	# from Entities.enemy import Enemy
+	# from Entities.mass import Mass
+	# from Maps.line import Line
+	# from interaction import Interaction
 from modules import *
 
 #^ CONSTANTS:

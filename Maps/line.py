@@ -50,5 +50,8 @@ class Line:
 
             Returns:
                 (int): distance from ball to wall
+
+            Calls:
+                distance_vector(): used to fetch the distance from ball in vector form
             """
         return (self.distance_vector(ball.position).length()) # Shortest distance between ball and wall as length

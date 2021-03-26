@@ -275,8 +275,7 @@ class Interaction:
 
             To check if the player is dead, the field which keeps track if it alive is checked. 
             If the field 'alive' is false, then the player is dead and therefore has lost. 
-
-        """
+            """
         if (len(self.enemy) == 0):
             self.frame.stop()
             print("You Won")
