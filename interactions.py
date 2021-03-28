@@ -25,35 +25,92 @@ class Interaction:
     #^ Draw:  
     def draw(self, canvas):
         """Draws each element in list of objects. 
-            Multiple objects such as balls and walls are stored in list for better management.
-            Each element in the list is iterated over and drawn. 
-            Player is a single object so it is drawn normally. 
-            Score draws some text showing the kills from the player and the size in radius. 
-            Update method called to update objects every second. 
+            Method calls other draw methods for the specific objects. 
             
             Args:
                 canvas (Canvas): where the gameplay takes place. 
             
             Calls:
                 update(): used to update the state and position of the balls. 
+                draw_player(canvas): draws the player in the canvas
+                draw_enemy(canvas): draws the enemies in the canvas
+                draw_map(canvas): draws game map in the canvas
+                draw_store(canvas): draws player scores in the canvas
             """
         self.update() # Update method called to update the ball objects
-        
-        #^ Draw Lines:
-        for line in self.lines: # For each line stored in the line list
-            line.draw(canvas) # Draw the current line 
-        
-        #^ Draw Enemy:
-        for enemy in self.enemy: # For each ball stored in the ball list
-            enemy.draw(canvas) # Draw the current ball
-        
-        #^ Draw Player
+        self.draw_player(canvas)
+        self.draw_enemy(canvas)
+        self.draw_map(canvas)
+        self.draw_score(canvas)
+    
+    def draw_player(self, canvas):
+        """Draws the player. 
+            
+
+            Args:
+                canvas (Canvas): where the game play takes place
+            """
         self.player.draw(canvas)
 
-        #^ Draw Text (Score):
+    def draw_enemy(self, canvas):
+        """Draws the enemies. 
+            There are multiple enemy objects stored in the list. 
+            A for loop is used to iterate over each enemy in the list. 
+            For each enemy, the draw method of the current enemy object is called. 
+
+            Args:
+                canvas (Canvas): where the game play takes place
+            """
+        for enemy in self.enemy: # For each ball stored in the ball list
+            enemy.draw(canvas) # Draw the current ball
+
+    def draw_map(self, canvas):
+        """Draws the walls around the canvas. 
+            The walls (thick lines) are used to as boundaries for ball objects. 
+            The ball objects bounce upon collision with the wall. 
+            There are multiple walls which are stored in the list. 
+            A for loop is used to iterate over the walls stored in the list. 
+            For each wall object, the draw method of the wall is called. 
+
+            Args:
+                canvas (Canvas): where the game play takes place
+            """
+        for line in self.lines: # For each line stored in the line list
+            line.draw(canvas) # Draw the current line 
+
+    def draw_score(self, canvas):
+        """Draws score as text. 
+            Draws the number of enemies killed (engulfed) by the player. 
+            Draws the size of the player by using the radius of the player. 
+            Draws the time remaining. 
+
+            These are all drawn in on line along the top wall. 
+
+            Args:
+                canvas (Canvas): where the game play takes place
+            """
         canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}       Time: {self.time_limit}', (20, 13), 18, "Green")
     
     #^ Update:
+    def update(self):
+        """Updates balls in the list. 
+            This method handles updating the enemies stored in the enemy list and the single player. 
+            Each ball (player, enemy and mass) stored is an object. 
+            Enemies and players are updated by colling their respective update method. 
+            
+            Function to check if game is over is called for checking.
+            This function checks whether the game is over and executes the appropriate actions. 
+
+            Calls:
+                update_player(): handles updating position and state of the player. 
+                update_enemy(): handles updating position and state of the enemy.
+                game_finish(): checks whether the game is over (if player has lost or won). 
+            """
+        self.update_player()   
+        self.update_enemy()
+        self.game_finish()
+        self.countdown()
+
     def update_player(self):
         """Update the player. 
             Method handles updating the position of the player and bouncing upon collision with walls. 
@@ -121,25 +178,6 @@ class Interaction:
                     self.gravity(enemy, enemy2) # Gravity acts on the balls
                     if self.hit_ball(enemy, enemy2): # Check if there has been a collision between 2 enemies
                         self.engulf(enemy, enemy2) # If there has been a collision then engulf method is called
-
-    def update(self):
-        """Updates balls in the list. 
-            This method handles updating the enemies stored in the enemy list and the single player. 
-            Each ball (player, enemy and mass) stored is an object. 
-            Enemies and players are updated by colling their respective update method. 
-            
-            Function to check if game is over is called for checking.
-            This function checks whether the game is over and executes the appropriate actions. 
-
-            Calls:
-                update_player(): handles updating position and state of the player. 
-                update_enemy(): handles updating position and state of the enemy.
-                game_finish(): checks whether the game is over (if player has lost or won). 
-            """
-        self.update_player()   
-        self.update_enemy()
-        self.game_finish()
-        self.countdown()
 
     def countdown(self):
         """Counts down the timer set.
