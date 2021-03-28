@@ -265,7 +265,7 @@ class Interaction:
             smaller_ball = ball1
 
         #^ Erasing Engulfed Ball
-        larger_ball.set_radius(sum_radii / 5) # Fraction of the sum of the balls set to ball 1
+        larger_ball.set_radius(sum_radii) # Fraction of the sum of the balls set to ball 1
         if (smaller_ball.type == "enemy"): # If the ball eaten (smaller ball) was the enemy
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
             self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method

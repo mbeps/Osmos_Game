@@ -60,4 +60,4 @@ class Ball:
             Args:
                 radius (int): new radius size that needs to be assigned. 
             """
-        self.radius += radius
+        self.radius = radius
