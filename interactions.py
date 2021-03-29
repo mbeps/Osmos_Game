@@ -82,14 +82,16 @@ class Interaction:
         """Draws score as text. 
             Draws the number of enemies killed (engulfed) by the player. 
             Draws the size of the player by using the radius of the player. 
-            Draws the time remaining. 
+            Draws the time remaining if the timer is not unlimited. 
 
             These are all drawn in on line along the top wall. 
 
             Args:
                 canvas (Canvas): where the game play takes place
             """
-        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}       Time: {self.time_limit}', (20, 13), 18, "Green")
+        if (self.time_limit < 0): # If the time is unlimited, then the timer is not drawn
+            canvas.draw_text(f'Time: Unlimited', (200, 13), 18, "Green")
+        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}', (20, 13), 18, "Green")
     
     #^ Update:
     def update(self):
@@ -313,6 +315,10 @@ class Interaction:
 
             To check if the player is dead, the field which keeps track if it alive is checked. 
             If the field 'alive' is false, then the player is dead and therefore has lost. 
+
+            The player will lose if the it has not killed all the enemies by the time the timer runs out. 
+            When the timer reaches 0, the timer has run out. 
+            For the timer to be unlimited, the timer is set to be less than 0 (-1) which means that the condidion is never met. 
             """
         if (len(self.enemy) == 0):
             self.frame.stop()

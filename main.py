@@ -22,7 +22,15 @@ def set_time():
 		Returns:
 			(int): time limit
 		"""
-	return (int(input("Time Limit (secs): ")))
+	print("Select the time limit for the game. Setting 0 will mean that there is no time limit. ")
+	time_limit = int(input("Time Limit (secs): "))
+	if (time_limit < 0):
+		input("Invalid time. Press any key to continue. ")
+		set_time()
+	elif (time_limit == 0):
+		time_limit = -1 # Game ends when 0 is reached. Therefore, the game will never end. 
+	
+	return time_limit
 
 #^ MAIN:
 #^ Setting Up Environment:
