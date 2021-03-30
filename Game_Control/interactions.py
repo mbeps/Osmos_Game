@@ -1,5 +1,5 @@
 
-from Game_Physics.Vector import Vector
+from Game_Control.Vector import Vector
 
 class Interaction:
     """Handles the interactions between game objects. 

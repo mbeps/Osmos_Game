@@ -2,12 +2,11 @@
 #^ MODULES:
 from modules import *
 
-#^ CONSTANTS:
+#^ MAIN:
+#^ Setting Up Environment:
 CANVAS_WIDTH = 800
 CANVAS_HEIGHT = 500
 
-#^ MAIN:
-#^ Setting Up Environment:
 keyboard = Keyboard()
 time_limit = set_time()
 balls = [Enemy(Vector(200, 100), Vector(-3, -3), 15), 

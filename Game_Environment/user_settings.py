@@ -1,3 +1,7 @@
+"""This is where the user can set settings. 
+		Game settings can be changed thorugh the terminal. 
+	"""
+
 def set_time():
 	"""Allows the user select the time limit. 
 		Takes the input from the user and returns in as integer. 
