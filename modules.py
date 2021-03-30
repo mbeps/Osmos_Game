@@ -10,4 +10,4 @@ from Entities.mass import Mass
 from Maps.line import Line
 from Game_Control.interactions import Interaction
 from Game_Control.keyboard import Keyboard
-from Game_Environment.user_settings import set_time
+from Game_Environment.user_settings import *
