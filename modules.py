@@ -10,3 +10,4 @@ from Entities.mass import Mass
 from Maps.line import Line
 from interactions import Interaction
 from keyboard import Keyboard
+from settings import set_time
