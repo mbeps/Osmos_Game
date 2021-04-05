@@ -27,7 +27,7 @@ def set_setting(time_limit, canvas_dimensions):
 		set_time(time_limit)
 		set_canvas_size(canvas_dimensions)	
 
-def set_time(time_limit): 
+def set_time(time_limit): #! BUG: not working asked. Only works when functions called directly from main
 	"""Allows the user select the time limit. 
 		The function takes the default time and modifies it. 
 		Takes the input from the user and returns in as integer. 

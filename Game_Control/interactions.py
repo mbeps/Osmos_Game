@@ -4,17 +4,22 @@ from Game_Control.Vector import Vector
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines, player, enemy, time, keyboard, frame):
+    def __init__(self, lines, player, enemy, power_ups, time, keyboard, frame):
         """Initializes interacation object to handle interactions between game objects.
             
             Args:
                 lines (Line): walls of the game where balls bounce 
                 player (Ball): player of the game
                 enemy (Ball): enemy that move around the map (enemies)
+                power_ups (Ball): power up the player upon collision
+                time (int): time limit for the game
+                keyboard (Keyboard): handles keyboard input to make the player move
+                frame (Frame): interactive window where game play takes place
             """
         self.enemy = enemy
         self.lines = lines
         self.player = player
+        self.power_ups = power_ups
         self.in_collision = False
         self.keyboard = keyboard
         self.kill_counter = 0
@@ -34,12 +39,14 @@ class Interaction:
                 update(): used to update the state and position of the balls. 
                 draw_player(canvas): draws the player in the canvas
                 draw_enemy(canvas): draws the enemies in the canvas
+                draw_power_ups(canvas): draw the powerups in the canvas
                 draw_map(canvas): draws game map in the canvas
                 draw_store(canvas): draws player scores in the canvas
             """
         self.update() # Update method called to update the ball objects
         self.draw_player(canvas)
         self.draw_enemy(canvas)
+        self.draw_power_ups(canvas)
         self.draw_map(canvas)
         self.draw_score(canvas)
     
@@ -63,6 +70,18 @@ class Interaction:
             """
         for enemy in self.enemy: # For each ball stored in the ball list
             enemy.draw(canvas) # Draw the current ball
+
+    def draw_power_ups(self, canvas):
+        """Draws the power ups.
+            There are multiple power ups objects stored in the list. 
+            A for loop is used to iterate over each power up in the list. 
+            For each enemy, the draw method of the current power up object is called. 
+
+            Args:
+                canvas (Canvas): where the game play takes place
+            """
+        for power_up in self.power_ups:
+            power_up.draw(canvas)    
 
     def draw_map(self, canvas):
         """Draws the walls around the canvas. 
@@ -106,10 +125,12 @@ class Interaction:
             Calls:
                 update_player(): handles updating position and state of the player. 
                 update_enemy(): handles updating position and state of the enemy.
+                update_power_ups(): handles checking collision with player object. 
                 game_finish(): checks whether the game is over (if player has lost or won). 
             """
         self.update_player()   
         self.update_enemy()
+        self.update_power_ups()
         self.game_finish()
         self.countdown()
 
@@ -138,8 +159,14 @@ class Interaction:
             Depending the key being pressed, the velocity is incremented on the specific axes. 
             There is a limit for how fast the player can travel. 
             Once this speed limit is reached, the velocity will not be incremented. 
+
+            When the player object receives a power up, the speed limit is increases. 
             """
         velocity_limit = 5
+
+        if self.player.faster == True: # Set to true when player receives power up
+            velocity_limit = 10
+
         if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit): #* Right
             self.player.velocity.add(Vector(1, 0))
         if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit): #* Left
@@ -180,6 +207,17 @@ class Interaction:
                     self.gravity(enemy, enemy2) # Gravity acts on the balls
                     if self.hit_ball(enemy, enemy2): # Check if there has been a collision between 2 enemies
                         self.engulf(enemy, enemy2) # If there has been a collision then engulf method is called
+
+    def update_power_ups(self):
+        """Checking of the power up object has collided with player object. 
+            A for loop is used to iterate over the list of powerups. 
+            For each power up object, it is checked whether there has been a collision. 
+            If there has a been a collision, then the player object receives a power up and the current power up object is removed from the list. 
+            """
+        for power_up in self.power_ups:
+            if self.hit_ball(self.player, power_up):
+                self.power_ups.remove(power_up)
+                self.player.faster = True
 
     def countdown(self):
         """Counts down the timer set.
@@ -272,7 +310,7 @@ class Interaction:
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
             self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
         elif (smaller_ball.type == "player"): # If the ball eaten (smaller ball) was the player
-            self.player.alive = False # A method will check this and terminate the game
+            self.player.alive = False # A method will check this and terminate the game                
 
     def bounce(self, ball):
         """Bounces the ball if there was a collision with the wall. 

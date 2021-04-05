@@ -13,3 +13,4 @@ class Player (Ball):
         self.type = "player"
         self.colour = "green"
         self.alive = True
+        self.faster = False

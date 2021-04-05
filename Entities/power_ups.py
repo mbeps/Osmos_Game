@@ -1,0 +1,21 @@
+from Entities.ball import Ball
+
+class Power_Up (Ball):
+    """Power Up objects are supposed to give certain power ups to the player.
+        Power is sub-class of Ball which means that it inherits the functionalities such as movement and bounce.
+		When there is a collision with the player, a specific power up (speed / mass) will be given for a limited time. 
+        
+        """
+    def __init__ (self, position, velocity, radius):
+        """Initializes the Power Up object. 
+            Power Up class calls the initializer from Ball class which is the super-class.
+            Power Up has different colour from the Ball. 
+
+            Args:
+                position (Vector): initial position of the ball
+                velocity (Vector): direction of the ball
+                radius (int): size of the radius 
+            """
+        super().__init__(position, velocity, radius) # Use the initializer from super-class
+        self.type = "power_up"
+        self.colour = "yellow"
