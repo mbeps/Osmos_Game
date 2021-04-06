@@ -14,6 +14,7 @@ class Keyboard:
         self.left = False
         self.up = False
         self.down = False
+        self.e = False
 
     def keyDown(self, key):
         """Actions when certain keys are down or being pressed (could be held down). 
@@ -31,6 +32,8 @@ class Keyboard:
             self.up = True
         elif key == simplegui.KEY_MAP['down']:
             self.down = True
+        elif key == simplegui.KEY_MAP['e']:
+            self.e = True
 
     def keyUp(self, key):
         """Actions when certain keys are up or not being pressed (could be held down). 
@@ -47,3 +50,5 @@ class Keyboard:
             self.up = False
         elif key == simplegui.KEY_MAP['down']:
             self.down = False
+        elif key == simplegui.KEY_MAP['e']:
+            self.e = False

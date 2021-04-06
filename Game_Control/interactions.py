@@ -1,10 +1,13 @@
 
 from Game_Control.Vector import Vector
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+from Entities.power_ups import Power_Up
+import random
 
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines, player, enemy, power_ups, time, keyboard, frame):
+    def __init__(self, lines, player, enemy, time, keyboard, frame):
         """Initializes interacation object to handle interactions between game objects.
             
             Args:
@@ -16,16 +19,25 @@ class Interaction:
                 keyboard (Keyboard): handles keyboard input to make the player move
                 frame (Frame): interactive window where game play takes place
             """
+        #^ Entities:
         self.enemy = enemy
-        self.lines = lines
         self.player = player
-        self.power_ups = power_ups
+        self.power_ups = []
+        self.lines = lines
+
         self.in_collision = False
-        self.keyboard = keyboard
+        self.keyboard = keyboard 
         self.kill_counter = 0
         self.frame = frame
+        
+        #^ Timers:
         self.time_limit = time # The limit for which the game will run 
-        self.time_count = 0 # Counts how many times method is called. Used for computing one second. 
+        self.time_count = simplegui.create_timer(1000, self.countdown) # Counts how many times method is called. Used for computing one second. 
+        self.time_count.start()
+        self.player_power_up_timer = simplegui.create_timer(10_000, self.reset_player_power_up) # How long the power up will last
+        self.player_power_up_timer.start()
+        self.power_up_timer_create = simplegui.create_timer(20_000, self.add_power_up) # Create a power up object every set time
+        self.power_up_timer_create.start()
 
     #^ Draw:  
     def draw(self, canvas):
@@ -101,16 +113,27 @@ class Interaction:
         """Draws score as text. 
             Draws the number of enemies killed (engulfed) by the player. 
             Draws the size of the player by using the radius of the player. 
-            Draws the time remaining if the timer is not unlimited. 
+            Draws the time remaining.
+
+            If the time limit is unlimited or greater than 10, then the text will be green indicating that there is plenty of time. 
+            If the time is less than 10, then the text will be red indicating that the time is running out. 
 
             These are all drawn in on line along the top wall. 
 
             Args:
                 canvas (Canvas): where the game play takes place
             """
-        if (self.time_limit < 0): # If the time is unlimited, then the timer is not drawn
-            canvas.draw_text(f'Time: Unlimited', (200, 13), 18, "Green")
-        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}', (20, 13), 18, "Green")
+        if (self.time_limit < 0 ):
+            remaining_time = "Unlimited"
+        else:
+            remaining_time = self.time_limit
+
+        if (self.time_limit > 10 or self.time_limit < 0):
+            colour = "green"
+        else:
+            colour = "red"
+           
+        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}      Time: {remaining_time}', (20, 13), 18, colour)
     
     #^ Update:
     def update(self):
@@ -132,7 +155,6 @@ class Interaction:
         self.update_enemy()
         self.update_power_ups()
         self.game_finish()
-        self.countdown()
 
     def update_player(self):
         """Update the player. 
@@ -219,15 +241,29 @@ class Interaction:
                 self.power_ups.remove(power_up)
                 self.player.faster = True
 
+    def add_power_up(self):
+        """Creates power up objects. 
+            This is called from `self.power_up_timer_create` which will create a new power up at a set time interval. 
+            The maximum number of power ups is 5 after which point no more power ups will be added. 
+            An if statement is used if the number of power ups (in the list) has reached the limit. 
+            """
+        if (len(self.power_ups) < 5):
+            self.power_ups.append(Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)), 5))
+
     def countdown(self):
         """Counts down the timer set.
             Uses the counter to keep track of how many times the method is called. 
             The modulus is used to compute one second based on the counter.
             For every second, the time limit is decremented. 
             """
-        self.time_count += 1
-        if ((self.time_count % 60) == 0):
-            self.time_limit -= 1
+        self.time_limit -= 1
+
+    def reset_player_power_up(self):
+        """Resets player power up. 
+            Called from `self.player_power_up_timer` timer. 
+            """
+        self.player.faster = False
+
 
     #^ Mechanics:
     def gravity(self, ball1, ball2):
@@ -357,16 +393,35 @@ class Interaction:
             The player will lose if the it has not killed all the enemies by the time the timer runs out. 
             When the timer reaches 0, the timer has run out. 
             For the timer to be unlimited, the timer is set to be less than 0 (-1) which means that the condidion is never met. 
+
+            Checks whether the letter 'e' has been pressed. 
+            If it has been pressed, the game will be terminated. 
+
+            Calls:
+                `stop()`: terminates the handlers (timer, frame)
             """
         if (len(self.enemy) == 0):
-            self.frame.stop()
+            self.stop()
             print("You Won")
         elif (self.player.alive == False):
-            self.frame.stop()
-            print("Game Over. You Lost")
+            self.stop()
+            print("Game Over. You Lost.")
         elif (self.time_limit == 0):
-            self.frame.stop()
             print("Ran Out of Time. You Lost")
+            self.stop()
+        elif (self.keyboard.e):
+            print("Game Exited")
+            self.stop()
+
+    def stop(self):
+        """Terminates all the handlers.
+            All the timers and the frame are terminated. 
+            This terminates the game. 
+            """
+        self.frame.stop()
+        self.power_up_timer_create.stop()
+        self.time_count.stop()
+        self.player_power_up_timer.stop()
 
 # A bug is present where the enemies will infinitely get larger if the plater is eaten.
 # Terminating the game is a workaround. 
