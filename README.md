@@ -1,6 +1,5 @@
 # Osmos Game
-## An Osmos game made using Python and the SimpleGUI library. 
-
+## Introduction 
 The game developed is called Osmos. The objective of this game is for the player to survive and kill all the enemies before the timer runs out. The bigger balls will engulf the smaller balls. This means that enemies can merge and become larger, the player will have to kill all the enemies before they merge otherwise the enemies will be too large for the player to kill. The timer is set by the player which defines how much time the player has to kill the enemies. The player is controlled using the arrow keys. All the balls in the game bounce on walls of they collide. 
 
 ## Rules:
