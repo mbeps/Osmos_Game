@@ -17,3 +17,5 @@ class Mass (Ball):
                 super().__init__(position, velocity, radius): calls the constructor of the super class to initialize object.  
             """
         super().__init__(position, velocity, radius) # Use the initializer from super-class
+        self.type = "mass"
+        self.colour = "orange"
