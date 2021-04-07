@@ -23,7 +23,8 @@ class Interaction:
         self.enemy = enemy
         self.player = player
         self.power_ups = []
-        self.mass = [Mass(Vector(200, 300), Vector(2,1), 2)]
+        # self.mass = [Mass(Vector(500, 300), Vector(2,1), 2)]
+        self.mass = []
         self.lines = lines
 
         #^ Environment:
@@ -220,11 +221,16 @@ class Interaction:
             self.player.velocity.add(Vector(0,+1))
             # self.eject_mass()
 
-    def eject_mass(self):
+    def eject_mass(self): #! Not working
         """Each time the player manually moves mass is created. 
             Mass will move in the opposite direction to emulate Newton's Laws. 
-        """
-        self.mass.append(Mass(self.player.position, Vector(-self.player.velocity.get_p()[0], -self.player.velocity.get_p()[1]), 2))
+            """
+        position = Vector(self.player.position.get_p()[0] + self.player.radius + 3, self.player.position.get_p()[1] + self.player.radius + 3)
+        angle = position.angle(self.player.velocity)
+        position = position.rotate(180 + angle) #! Being spaawned outside the canvas
+        velocity = Vector(-self.player.velocity.get_p()[0], -self.player.velocity.get_p()[1])
+
+        self.mass.append(Mass(position, velocity, 2, self.player.colour))
 
     def update_enemy(self):
         """Update the enemies. 
@@ -278,7 +284,6 @@ class Interaction:
             
             if self.hit_ball(mass, self.player): # Check if there has been collision with player
                 self.engulf(self.player, mass) # If true, then the player object will engulf the mass
-    
     
     def update_power_ups(self):
         """Checking of the power up object has collided with player object. 
