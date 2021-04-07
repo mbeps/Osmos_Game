@@ -13,9 +13,9 @@ class Power_Up (Ball):
             Power Up has different colour from the Ball. 
 
             Args:
-                position (Vector): initial position of the ball
-                velocity (Vector): direction of the ball
-                radius (int): size of the radius 
+                `position (Vector)`: initial position of the ball.
+                `velocity (Vector)`: direction of the ball.
+                `radius (int)`: size of the radius.
             """
         super().__init__(position, Vector(0, 0), radius) # Use the initializer from super-class
         self.type = "power_up"

@@ -12,12 +12,12 @@ def set_setting(time_limit, canvas_dimensions):
 		Otherwise, the nothing will be changed and the function will terminate. 
 		
 		Args:
-			time_limit (int): the time limit of the game in by which the player must win
-			canvas_dimensions (int[]): dimensions of the canvas
+			`time_limit (int)`: the time limit of the game in by which the player must win.
+			`canvas_dimensions (int[])`: dimensions of the canvas.
 
 		Calls:
-			set_time(time_limit): set the time limit of the game by changing the default time passed as argument
-			set_canvas_size(canvas_size): sets the size of the canvas by changing the default time passed as argument
+			`set_time(time_limit)`: set the time limit of the game by changing the default time passed as argument.
+			`set_canvas_size(canvas_size)`: sets the size of the canvas by changing the default time passed as argument.
 		"""
 	print("Would you like to play with the default settings or would you like to change them?")
 	choice = False
@@ -42,7 +42,7 @@ def set_time(time_limit): #! BUG: not working asked. Only works when functions c
 		If 0 is never reached the game will not terminate because the timer ran out (reached 0). 
 
 		Returns:
-			(int): time limit
+			`(int)`: time limit
 		"""
 	print("Select the time limit for the game. Setting 0 will mean that there is no time limit. ")
 	try:
@@ -77,10 +77,10 @@ def set_canvas_size(canvas_dimensions):
 		In case the default sizes are not returned, then the initial user input are stored in the list which is then returned. 
 
 		Args:
-			canvas_dimensions (int[]): height (x) and width (y) of the canvas
+			`canvas_dimensions (int[])`: height (x) and width (y) of the canvas.
 
 		Returns:
-			(int[]): height (x) and width (y) of the canvas
+			`(int[])`: height (x) and width (y) of the canvas.
 		"""
 	print(f'Select the size of the canvas. Selecting 0 will set the default size of {canvas_dimensions[0]} × {canvas_dimensions[1]} which is the minimum size. The maximum size is 1500 × 800')
 	try:

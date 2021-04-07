@@ -12,23 +12,22 @@ class Interaction:
         """Initializes interacation object to handle interactions between game objects.
             
             Args:
-                lines (Line): walls of the game where balls bounce 
-                player (Ball): player of the game
-                enemy (Ball): enemy that move around the map (enemies)
-                time (int): time limit for the game
-                keyboard (Keyboard): handles keyboard input to make the player move
-                frame (Frame): interactive window where game play takes place
+                `lines (Line)`: walls of the game where balls bounce.
+                `player (Ball)`: player of the game.
+                `enemy (Ball)`: enemy that move around the map (enemies).
+                `time (int)`: time limit for the game.
+                `keyboard (Keyboard)`: handles keyboard input to make the player move.
+                `frame (Frame)`: interactive window where game play takes place.
             """
         #^ Entities:
         self.enemy = enemy
         self.player = player
         self.power_ups = []
-        # self.mass = [Mass(Vector(500, 300), Vector(2,1), 2)]
         self.mass = []
         self.lines = lines
 
         #^ Environment:
-        self.in_collision = False
+        self.in_collision = False #£ Move to ball class
         self.keyboard = keyboard 
         self.kill_counter = 0
         self.frame = frame
@@ -48,16 +47,16 @@ class Interaction:
             Method calls other draw methods for the specific objects. 
             
             Args:
-                canvas (Canvas): where the gameplay takes place. 
+                `canvas (Canvas)`: where the gameplay takes place. 
             
             Calls:
-                update(): used to update the state and position of the balls. 
-                draw_player(canvas): draws the player in the canvas
-                draw_enemy(canvas): draws the enemies in the canvas
-                draw_mass(canvas): draws the mass in the canvas
-                draw_power_ups(canvas): draw the powerups in the canvas
-                draw_map(canvas): draws game map in the canvas
-                draw_store(canvas): draws player scores in the canvas
+                `self.update()`: used to update the state and position of the balls. 
+                `self.draw_player(canvas)`: draws the player in the canvas
+                `self.draw_enemy(canvas)`: draws the enemies in the canvas
+                `self.draw_mass(canvas)`: draws the mass in the canvas
+                `self.draw_power_ups(canvas)`: draw the powerups in the canvas
+                `self.draw_map(canvas)`: draws game map in the canvas
+                `self.draw_store(canvas)`: draws player scores in the canvas
             """
         self.update() # Update method called to update the ball objects
         self.draw_player(canvas)
@@ -68,13 +67,19 @@ class Interaction:
         self.draw_score(canvas)
     
     def draw_player(self, canvas):
-        """Draws the player. 
+        """Draws the player in the canvas.
+            The player is drawn only if the it is alive. 
+            If the player is not alive, then the it will not be drawn. 
+            An if statement is used to check whether the player is alive. 
             
-
             Args:
-                canvas (Canvas): where the game play takes place
+                `canvas (Canvas)`: where the game play takes place.
+
+            Calls:
+                `Player.draw(canvas)`: calls the draw method from Player object to draw player object. 
             """
-        self.player.draw(canvas)
+        if (self.player.alive): # Check whether player object drawn if alive
+            self.player.draw(canvas)
 
     def draw_enemy(self, canvas):
         """Draws the enemies. 
@@ -83,7 +88,10 @@ class Interaction:
             For each enemy, the draw method of the current enemy object is called. 
 
             Args:
-                canvas (Canvas): where the game play takes place
+                `canvas (Canvas)`: where the game play takes place
+
+            Calls:
+                `Enemy.draw(canvas)`: calls the draw method from Enemy object to draw player object.
             """
         for enemy in self.enemy: # For each ball stored in the ball list
             enemy.draw(canvas) # Draw the current ball
@@ -95,19 +103,25 @@ class Interaction:
             For each mass, the draw method of the current mass object is called. 
 
             Args:
-                canvas(Canvas): where the game play takes place
+                `canvas(Canvas)`: where the game play takes place. 
+
+            Calls:
+                `Mass.draw(canvas)`: calls the draw method from Mass object to draw mass object.
             """
-        for mass in self.mass:
+        for mass in self.mass: # Iterates over each mass in the list
             mass.draw(canvas)
 
     def draw_power_ups(self, canvas):
         """Draws the power ups.
             There are multiple power ups objects stored in the list. 
             A for loop is used to iterate over each power up in the list. 
-            For each enemy, the draw method of the current power up object is called. 
+            For each power up, the draw method of the current power up object is called. 
 
             Args:
-                canvas (Canvas): where the game play takes place
+                `canvas (Canvas)`: where the game play takes place. 
+
+            Calls:
+                `Power_Up.draw(canvas)`: calls the draw method from Power_Up object to draw power up object.
             """
         for power_up in self.power_ups:
             power_up.draw(canvas)    
@@ -121,7 +135,10 @@ class Interaction:
             For each wall object, the draw method of the wall is called. 
 
             Args:
-                canvas (Canvas): where the game play takes place
+                `canvas (Canvas)`: where the game play takes place. 
+
+            Calls:
+                `Line.draw(canvas)`: calls the draw method from Line object to draw line object.
             """
         for line in self.lines: # For each line stored in the line list
             line.draw(canvas) # Draw the current line 
@@ -138,13 +155,15 @@ class Interaction:
             These are all drawn in on line along the top wall. 
 
             Args:
-                canvas (Canvas): where the game play takes place
+                `canvas (Canvas)`: where the game play takes place. 
             """
+        #^ Checks Time Limit:
         if (self.time_limit < 0 ):
             remaining_time = "Unlimited"
         else:
             remaining_time = self.time_limit
 
+        #^ Checks Remaining Time: 
         if (self.time_limit > 10 or self.time_limit < 0):
             colour = "green"
         else:
@@ -155,19 +174,19 @@ class Interaction:
     #^ Update:
     def update(self):
         """Updates balls in the list. 
-            This method handles updating the enemies stored in the enemy list and the single player. 
+            This method handles updating the enemies stored in the enemy list, the single player, the mass stored in a list, and the power ups stored in a list. 
             Each ball (player, enemy and mass) stored is an object. 
-            Enemies and players are updated by colling their respective update method. 
+            Enemies, players, mass, and power ups are updated by calling their respective update methods. 
             
             Function to check if game is over is called for checking.
             This function checks whether the game is over and executes the appropriate actions. 
 
             Calls:
-                update_player(): handles updating position and state of the player. 
-                update_enemy(): handles updating position and state of the enemy.
-                update_mass(): handles updating position and state of the mass. 
-                update_power_ups(): handles checking collision with player object. 
-                game_finish(): checks whether the game is over (if player has lost or won). 
+                `self.update_player()`: handles updating position and state of the player. 
+                `self.update_enemy()`: handles updating position and state of the enemy.
+                `self.update_mass()`: handles updating position and state of the mass. 
+                `self.update_power_ups()`: handles checking collision with player object. 
+                `self.game_finish()`: checks whether the game is over (if player has lost or won). 
             """
         self.update_player()   
         self.update_enemy()
@@ -182,14 +201,14 @@ class Interaction:
             
             Keyboard controls are used to control the player. 
             When a key is pressed, the appropriate velocity according to the direction is incremented. 
-            This is handled by the player_control() method. 
+            This is handled by the `player_control()` method. 
 
             There is a single player which is updated normally. 
 
             Calls:
-                Player.update(): handles updating the position of the player object. 
-                bounce(): handles the updating the velocity of the player upon collision with wall. 
-                player_control(): moves the player using keypresses by updating the position. 
+                `Player.update()`: handles updating the position of the player object. 
+                `self.bounce()`: handles the updating the velocity of the player upon collision with wall. 
+                `self.player_control()`: moves the player using keypresses by updating the position. 
             """
         self.player.update()
         self.bounce(self.player)  
@@ -199,13 +218,19 @@ class Interaction:
         """Moves the player according the key being pressed. 
             Depending the key being pressed, the velocity is incremented on the specific axes. 
             There is a limit for how fast the player can travel. 
-            Once this speed limit is reached, the velocity will not be incremented. 
+            
+            Once this speed limit is reached, the statement is not executed. 
+            This means that the speed will not longer be increased as velocity will not be incremented and 
+            mass will not be ejected. 
 
             When the player object receives a power up, the speed limit is increases. 
+
+            Calls: 
+                `self.eject_mass()`: ejects the mass from player when position is updated manually.
             """
         velocity_limit = 5
 
-        if self.player.faster == True: # Set to true when player receives power up
+        if (self.player.faster == True): # Set to true when player receives power up
             velocity_limit = 10
 
         if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit): #* Right
@@ -224,6 +249,14 @@ class Interaction:
     def eject_mass(self): #! Not working
         """Each time the player manually moves mass is created. 
             Mass will move in the opposite direction to emulate Newton's Laws. 
+
+            The mass is spawned on the opposite side of the direction of the player object. 
+            Position is computed by taking the left point (x-axis) of the circumference of the player object 
+            and rotating it by 180 degrees plus the angle between the horizontal component and the direction of the velocity of the player. 
+            This position is then used to define where the mass object will be spawned. 
+
+            The velocity of the mass object will be in the opposite direction of the player object; 
+            this means that the velocity of the mass object is the negative version of the player object.            
             """
         position = Vector(self.player.position.get_p()[0] + self.player.radius + 3, self.player.position.get_p()[1] + self.player.radius + 3)
         angle = position.angle(self.player.velocity)
@@ -236,26 +269,28 @@ class Interaction:
         """Update the enemies. 
             Method handles the updating the position of the enemies and bouncing upon collision with walls. 
             To update the position of the enemy, the update method of the enemy object itself is called. 
-            Method also checks the state of the enemies by checking if there have been collisions (`hit()` method) with other enemies or the player. 
+            Method also checks the state of the enemies by checking if there have been collisions (`hit()` method) with other enemies, mass or the player. 
+            When enemies get close to other enemies or mass, gravity is applied on the two objects. 
             If there have been collisions that the appropriate ball is engulfed. 
             
             Enemies are stored in a list of enemies. 
             This means that each enemy is the list is handles individually by iterating over the list. 
+            A for loop is used to iterate over each enemy and carry out the operations and checks mentioned before. 
 
             Calls:
-                Enemy.update(): handles updating the position of the enemy object. 
-                bounce(enemy): handles the updating the velocity of the enemy upon collision with wall. 
-                hit(enemy, enemy2): detects collision of the enemy with another ball (enemy, player).
-                gravity(ball1, ball2): attracts two balls together. 
-                engult(enemy, enemy2): once there has been a collision, bigger ball will engult the smaller ball. 
+                `Enemy.update()`: handles updating the position of the enemy object. 
+                `self.bounce(enemy)`: handles the updating the velocity of the enemy upon collision with wall. 
+                `self.hit(enemy, enemy2)`: detects collision of the enemy with another ball (enemy, player).
+                `self.gravity(ball1, ball2)`: attracts two balls together. 
+                `self.engult(enemy, enemy2)`: once there has been a collision, bigger ball will engult the smaller ball. 
             """
         for enemy in self.enemy: # For each enemy object in the enemy list
             enemy.update() # Update the ball (moves the ball)
             self.bounce(enemy) # Bounce the ball if there is a collision 
             
             #^ Checking Collision with Player
-            if self.hit_ball(self.player, enemy):
-                self.engulf(self.player, enemy) # Check if there has been a collision between player and enemy
+            if self.hit_ball(self.player, enemy): # Check if there has been a collision between player and enemy
+                self.engulf(self.player, enemy) # If true, the one of the two objects is engulfed
             
             #^ Checking Collision with other Enemy
             for enemy2 in self.enemy: # Check collision with other enemies for each enemy in the list
@@ -332,8 +367,8 @@ class Interaction:
             The distance is computed by comparing the centers of the two balls which is used to check if smaller ball is within the range.  
 
             Args:
-                ball1 (Ball): one of the balls on which gravity could act on
-                ball2 (Ball): one of the balls on which gravity could act on
+                `ball1 (Ball)`: one of the balls on which gravity could act on.
+                `ball2 (Ball)`: one of the balls on which gravity could act on.
             """
         gravitational_force = 700 # Smaller means stronger
         distance_between_balls = int((ball1.position.copy().subtract(ball2.position)).length())
@@ -352,7 +387,7 @@ class Interaction:
             larger_ball.velocity.add((smaller_ball.position - larger_ball.position).divide(gravitational_force * 5)) # Bigger ball velocity changed (5 times weaker)
     
     def hit_ball(self, ball1, ball2):
-        """Detects collision between 2 balls:
+        """Detects collision between 2 balls. 
             Method computes the distance between the two centers of the balls. 
             The distance is compared with the sum of the radii of the balls. 
             If the distance between the centers is less than the sum of the radii then there has been a collision. 
@@ -360,14 +395,14 @@ class Interaction:
             Method will call engulf method to so that the larger ball will engulf the smaller ball.  
             
             Args:
-                ball1 (Ball): enemy
-                ball2 (Ball): can be enemy or player
+                `ball1 (Ball)`: enemy.
+                `ball2 (Ball)`: can be enemy, player or mass.
+            
             Returns:
-                [Boolean]: whether a collision has occurred
+                `(Boolean)`: whether a collision has occurred.
             """
         distance = ball1.position.copy().subtract(ball2.position)
-        if (distance.length() < (ball1.radius + ball2.radius)):
-            return True
+        return (distance.length() < (ball1.radius + ball2.radius))
 
     def engulf(self, ball1, ball2):
         """Engulf ball. 
@@ -387,11 +422,11 @@ class Interaction:
             Mass will never eat another entity as mass does not get larger because it does not engulf other mass. 
  
             Args:
-                ball1 (Ball): main ball.
-                ball2 (Ball): can be enemy or player.
+                `ball1 (Ball)`: main ball.
+                `ball2 (Ball)`: can be enemy or player.
             
             Calls:
-                Ball.set_radius(sum): increases the size of the ball by setting the sum of the two balls to the bigger one. 
+                `Ball.set_radius(sum)`: increases the size of the ball by setting the sum of the two balls to the bigger one. 
             """
         sum_radii = ball1.radius + ball2.radius
         larger_ball = ball1 
@@ -418,7 +453,7 @@ class Interaction:
             The distance between the center and wall is computed to check if there was a collision. 
             If the distance between the wall and the ball is less than the maximum distance then there has been a collision. 
 
-            in_collision variable keeps track of whether there has been a collision before. 
+            `in_collision` variable keeps track of whether there has been a collision before. 
             This is done to prevent the sticky problem where the ball is stuck in the wall. 
             If there is a previous collision and another one happens at the same time, then collision is not handles therefore no bounce. 
             After the collision takes place and there is no other collision, then the variable is set to false so that the next collision can be handled. 
@@ -427,11 +462,11 @@ class Interaction:
             This method will work for any dub-classes of ball. 
             
             Args:
-                ball (Ball): ball object which moves
+                `ball (Ball)`: ball object which moves.
             
             Calls: 
-                Line.distance(ball): works out the distance between the ball object (player, enemy). 
-                Ball.bounce(line.normal): reflect the velocity of the ball along normal to simulate a bounce. 
+                `Line.distance(ball)`: works out the distance between the ball object (player, enemy). 
+                `Ball.bounce(line.normal)`: reflect the velocity of the ball along normal to simulate a bounce. 
             """
         for line in self.lines: # For each line in the line list
             distance = ball.radius + (line.thickness / 2) + 1 # Sum of the wall thickness and wall size (radius)
@@ -462,7 +497,7 @@ class Interaction:
             If it has been pressed, the game will be terminated. 
 
             Calls:
-                `stop()`: terminates the handlers (timer, frame)
+                `stop()`: terminates the game and all the handlers (timer, frame).
             """
         if (len(self.enemy) == 0):
             self.stop()

@@ -1,7 +1,5 @@
 
 #^ MODULES:
-from Entities.power_ups import Power_Up
-from SimpleGUICS2Pygame.simpleguics2pygame.frame import create_frame
 from modules import *
 
 #^ MAIN:

@@ -9,7 +9,7 @@ class Keyboard:
         """Initializes keyboard object to keep track of key presses. 
             Initially, the keys are set to false as no keys are being pressed. 
             Once keypressed are detected, they will return true which can be used to execute certain actions.  
-        """
+            """
         self.right = False
         self.left = False
         self.up = False
@@ -22,7 +22,7 @@ class Keyboard:
             When true, certain actions can be executed. 
             
             Args:
-                key (Key): key that is currently being pressed. 
+                `key (Key)`: key that is currently being pressed. 
             """
         if key == simplegui.KEY_MAP['right']:
             self.right = True
@@ -40,7 +40,7 @@ class Keyboard:
             The keys are being set to false to indicate that they are no longer being pressed. 
             
             Args:
-                key (Key): key that were being pressed. 
+                `key (Key)`: key that were being pressed. 
             """
         if key == simplegui.KEY_MAP['right']:
             self.right = False
