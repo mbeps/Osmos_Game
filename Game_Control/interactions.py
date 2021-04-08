@@ -27,7 +27,6 @@ class Interaction:
         self.lines = lines
 
         #^ Environment:
-        self.in_collision = False #£ Move to ball class
         self.keyboard = keyboard 
         self.kill_counter = 0
         self.frame = frame
@@ -470,11 +469,11 @@ class Interaction:
             """
         for line in self.lines: # For each line in the line list
             distance = ball.radius + (line.thickness / 2) + 1 # Sum of the wall thickness and wall size (radius)
-            if (line.distance(ball) < distance) and (self.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the manimum distance and collision not dealt with
+            if (line.distance(ball) < distance) and (ball.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the manimum distance and collision not dealt with
                 ball.bounce(line.normal) # Call the bounce method from ball object
-                self.in_collision = True # Collision already dealt with therefore no sticky problem
+                ball.in_collision = True # Collision already dealt with therefore no sticky problem
             else: # Where there is no collision
-                self.in_collision = False # When there is no collision then set to false so that bounce can happen later
+                ball.in_collision = False # When there is no collision then set to false so that bounce can happen later
 
     #^ Game:
     def game_finish(self):
