@@ -202,6 +202,11 @@ class Interaction:
             When a key is pressed, the appropriate velocity according to the direction is incremented. 
             This is handled by the `player_control()` method. 
 
+            Since the player loses mass to change direction manually, 
+            an if statement is used to check if there is enough mass. 
+            If there is not, the player cannot change direction until it has enough mass. 
+            The radius is checked for this operation. 
+
             There is a single player which is updated normally. 
 
             Calls:
@@ -212,6 +217,10 @@ class Interaction:
         self.player.update()
         self.bounce(self.player)  
         self.player_controls()
+        if (self.player.radius <= 5):
+            self.player.move = False
+        elif (self.player.radius > 5):
+            self.player.move = True
 
     def player_controls(self):
         """Moves the player according the key being pressed. 
@@ -221,6 +230,9 @@ class Interaction:
             Once this speed limit is reached, the statement is not executed. 
             This means that the speed will not longer be increased as velocity will not be incremented and 
             mass will not be ejected. 
+
+            Additionally, if the player runs out of mass, then it cannot change velocity. 
+            The method checks whether the player can move using an if statement. 
 
             When the player object receives a power up, the speed limit is increases. 
 
@@ -232,37 +244,45 @@ class Interaction:
         if (self.player.faster == True): # Set to true when player receives power up
             velocity_limit = 10
 
-        if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit): #* Right
+        if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit) and (self.player.move): #* Right
             self.player.velocity.add(Vector(1, 0))
-            # self.eject_mass()
-        if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit): #* Left
+            self.eject_mass()
+        if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit) and (self.player.move): #* Left
             self.player.velocity.add(Vector(-1,0))
-            # self.eject_mass()
-        if (self.keyboard.up) and (self.player.velocity.get_p()[1] > -velocity_limit): #* Up
+            self.eject_mass()
+        if (self.keyboard.up) and (self.player.velocity.get_p()[1] > -velocity_limit) and (self.player.move): #* Up
             self.player.velocity.add(Vector(0,-1))
-            # self.eject_mass()
-        if (self.keyboard.down) and (self.player.velocity.get_p()[1] < velocity_limit): #* Down 
+            self.eject_mass()
+        if (self.keyboard.down) and (self.player.velocity.get_p()[1] < velocity_limit) and (self.player.move): #* Down 
             self.player.velocity.add(Vector(0,+1))
-            # self.eject_mass()
+            self.eject_mass()
 
     def eject_mass(self): #! Not working
         """Each time the player manually moves mass is created. 
             Mass will move in the opposite direction to emulate Newton's Laws. 
 
             The mass is spawned on the opposite side of the direction of the player object. 
-            Position is computed by taking the left point (x-axis) of the circumference of the player object 
-            and rotating it by 180 degrees plus the angle between the horizontal component and the direction of the velocity of the player. 
-            This position is then used to define where the mass object will be spawned. 
+            The formula `(player radius + mass radius) × (- player velocity / |player velocity|)` finds the opposite circumference which is the position of mass object. 
 
-            The velocity of the mass object will be in the opposite direction of the player object; 
-            this means that the velocity of the mass object is the negative version of the player object.            
+            When player moves in the opposite direction, the velocity of the mass could become 0 which will cause error. 
+            An if statement checks if the `x` or `y` are 0 and increments if condition is met. #
+
+            Once the calculation is complete, a mass object is added to the list. 
+            It takes the position calculated before, the negative velocity of player (opposite direction) and the colour. 
             """
-        position = Vector(self.player.position.get_p()[0] + self.player.radius + 3, self.player.position.get_p()[1] + self.player.radius + 3)
-        angle = position.angle(self.player.velocity)
-        position = position.rotate(180 + angle) #! Being spaawned outside the canvas
-        velocity = Vector(-self.player.velocity.get_p()[0], -self.player.velocity.get_p()[1])
+        mass_velocity = self.player.velocity.copy().negate()
+        mass_radius = 2
 
-        self.mass.append(Mass(position, velocity, 2, self.player.colour))
+        if (mass_velocity.get_p()[0] == 0):
+            mass_velocity += Vector(1, 0)
+        elif (mass_velocity.get_p()[1] == 0):
+            mass_velocity += Vector(0, 1)
+
+        mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
+        mass_position = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy()
+
+        self.mass.append(Mass((mass_position), mass_velocity, "Aqua"))
+        self.player.set_radius(self.player.radius - mass_radius)          
 
     def update_enemy(self):
         """Update the enemies. 
@@ -498,16 +518,16 @@ class Interaction:
             Calls:
                 `stop()`: terminates the game and all the handlers (timer, frame).
             """
-        if (len(self.enemy) == 0):
+        if (len(self.enemy) == 0): # Checks if all the enemies are dead
             self.stop()
             print("You Won")
-        elif (self.player.alive == False):
+        elif (self.player.alive == False): # Checks if the player is dead
             self.stop()
             print("Game Over. You Lost.")
-        elif (self.time_limit == 0):
+        elif (self.time_limit == 0): # Checks if the timer has ran out
             print("Ran Out of Time. You Lost")
             self.stop()
-        elif (self.keyboard.e):
+        elif (self.keyboard.e): # Checks if player exited the game by pressing 'e'
             print("Game Exited")
             self.stop()
 

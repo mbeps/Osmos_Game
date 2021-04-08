@@ -4,15 +4,15 @@ from modules import *
 
 #^ MAIN:
 #^ Game Environment:
-canvas_dimensions = [1040, 585] # Default canvas size (16:9)
+canvas_dimensions = [1456, 819] # Default canvas size (16:9)
 time_limit = -1 # Default time is unlimited 
 
 #^ Entities:
-enemies = [Enemy(Vector(200, 100), Vector(-3, -3), 15), 
+enemies = [Enemy(Vector(200, 150), Vector(-3, -3), 35), 
         Enemy(Vector(700, 270), Vector(2,4), 20),
-        Enemy(Vector(400, 160), Vector(-2, 1), 10),
-        Enemy(Vector(434, 112), Vector(1, 4), 5)]
-player = Player(Vector(canvas_dimensions[0] / 2, canvas_dimensions[1] - 100), Vector(0, 0), 20)
+        Enemy(Vector(400, 160), Vector(-2, 1), 15),
+        Enemy(Vector(434, 112), Vector(1, 4), 10)]
+player = Player(Vector(canvas_dimensions[0] / 2, canvas_dimensions[1] - 100), Vector(0, 0), 30)
 
 frame = simplegui.create_frame("Domain", canvas_dimensions[0], canvas_dimensions[1])
 lines = [Line(Vector(0, 0), Vector(0, canvas_dimensions[1])), # Vertical 1
