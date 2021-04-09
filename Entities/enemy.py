@@ -15,5 +15,5 @@ class Enemy (Ball):
                 `radius (int)`: size of the radius.
             """
         super().__init__(position, velocity, radius) # Use the initializer from super-class
-        self.type = "enemy"
-        self.colour = "red"
+        self.type = "Enemy"
+        self.colour = "Red"

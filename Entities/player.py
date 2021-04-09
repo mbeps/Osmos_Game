@@ -12,8 +12,8 @@ class Player (Ball):
         """
     def __init__ (self, position, velocity, radius):
         super().__init__(position, velocity, radius) # Use the initializer from super-class
-        self.type = "player"
-        self.colour = "green"
+        self.type = "Player"
+        self.colour = "Green"
         self.alive = True
         self.move = True
         self.power_up = "None" #* (None / Speed). More can be added

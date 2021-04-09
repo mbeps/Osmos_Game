@@ -15,7 +15,7 @@ class Ball:
         self.position = position
         self.velocity = velocity
         self.radius = radius
-        self.colour = "blue"
+        self.colour = "Blue"
         self.in_collision = False
 
     def draw(self, canvas):

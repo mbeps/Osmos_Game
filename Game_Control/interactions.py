@@ -283,7 +283,7 @@ class Interaction:
         mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
         mass_position = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy() # Computes the actual position of the mass
 
-        self.mass.append(Mass((mass_position), mass_velocity, "Aqua")) # Creates a new mass object which is added to the list
+        self.mass.append(Mass((mass_position), mass_velocity)) # Creates a new mass object which is added to the list
         self.player.set_radius(self.player.radius - mass_radius) # Decrements the radius of the player 
 
     def update_enemy(self):
@@ -465,12 +465,12 @@ class Interaction:
 
         #^ Erasing Engulfed Ball
         larger_ball.set_radius(sum_radii) # Fraction of the sum of the balls set to ball 1
-        if (smaller_ball.type == "enemy"): # If the ball eaten (smaller ball) was the enemy
+        if (smaller_ball.type == "Enemy"): # If the ball eaten (smaller ball) was the enemy
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
             self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
-        elif (smaller_ball.type == "player"): # If the ball eaten (smaller ball) was the player
+        elif (smaller_ball.type == "Player"): # If the ball eaten (smaller ball) was the player
             self.player.alive = False # A method will check this and terminate the game   
-        elif (smaller_ball.type == "mass"): # Mass is removed from list
+        elif (smaller_ball.type == "Mass"): # Mass is removed from list
             self.mass.remove(smaller_ball)
 
     def bounce(self, ball):

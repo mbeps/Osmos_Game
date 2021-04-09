@@ -18,5 +18,5 @@ class Power_Up (Ball):
                 `radius (int)`: size of the radius.
             """
         super().__init__(position, Vector(0, 0), radius) # Use the initializer from super-class
-        self.type = "power_up"
-        self.colour = "yellow"
+        self.type = "Power_Up"
+        self.colour = "Yellow"
