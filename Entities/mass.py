@@ -19,3 +19,16 @@ class Mass (Ball):
         super().__init__(position, velocity, 2) # Use the initializer from super-class
         self.type = "Mass"
         self.colour = "Aqua"
+        self.radius = 0.2
+
+    def draw(self, canvas):
+        """Draws ball and ball center.
+            Draws circles to represent ball, it takes the initial position, radius (hardcoded) and colour. 
+            Draws point which represents center of the circle for easier compuration later. It takes initial position and colour as argument. 
+            Initial position is given as Vector type for computation. Vector is converted to tuple. 
+            
+            Args:
+                `canvas (canvas)`: where the game play takes place.
+            """
+        canvas.draw_circle(self.position.get_p(), 2, 1, self.colour, self.colour) # Draws ball as circle
+        canvas.draw_point(self.position.get_p(), self.colour) # Draws point as the center of the ball

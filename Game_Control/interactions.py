@@ -262,7 +262,7 @@ class Interaction:
             self.player.velocity.add(Vector(0,+1))
             self.eject_mass()
 
-    def eject_mass(self): #! BUG: Creates 5 mass objects instead of 1
+    def eject_mass(self): 
         """Each time the player manually moves mass is created. 
             Mass will move in the opposite direction to emulate Newton's Laws. 
 
@@ -274,6 +274,10 @@ class Interaction:
 
             Once the calculation is complete, a mass object is added to the list. 
             It takes the position calculated before, the negative velocity of player (opposite direction) and the colour. 
+            
+            The player loses the mass which.
+            Each move will cause the player to lose 1 from the radius. 
+            Each mass is 0.2 radii and 5 are created for each movement. 
             """
         mass_velocity = self.player.velocity.copy().negate() # Velocity of the mass is the opposite direction from the player, therefore velocity is negated. 
         mass_radius = 2
@@ -372,7 +376,6 @@ class Interaction:
                 self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius)) # Creates a new enemy object which is added to the list
                 enemy.set_radius(enemy.radius - new_enemy_radius) # Decrements the radius of the player 
         
-
     def update_mass(self):
         """Update the mass. 
             Method handles updating the position of the mass and bouncing upon collision with walls. 
