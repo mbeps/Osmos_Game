@@ -36,7 +36,6 @@ class Interaction:
         self.time_count = simplegui.create_timer(1000, self.countdown) # Counts how many times method is called. Used for computing one second. 
         self.time_count.start()
         self.player_power_up_timer = simplegui.create_timer(10_000, self.reset_player_power_up) # How long the power up will last
-        self.player_power_up_timer.start()
         self.power_up_timer_create = simplegui.create_timer(20_000, self.add_power_up) # Create a power up object every set time
         self.power_up_timer_create.start()
 
@@ -146,7 +145,8 @@ class Interaction:
         """Draws score as text. 
             Draws the number of enemies killed (engulfed) by the player. 
             Draws the size of the player by using the radius of the player. 
-            Draws the time remaining.
+            Draws the time remaining. 
+            Draws the type of the power up currently being used. 
 
             If the time limit is unlimited or greater than 10, then the text will be green indicating that there is plenty of time. 
             If the time is less than 10, then the text will be red indicating that the time is running out. 
@@ -157,18 +157,23 @@ class Interaction:
                 `canvas (Canvas)`: where the game play takes place. 
             """
         #^ Checks Time Limit:
-        if (self.time_limit < 0 ):
+        if (self.time_limit < 0): # Decrementing from 0 means that the time limit is never reached
             remaining_time = "Unlimited"
-        else:
+        else: # If there is a time limit then it is displayed
             remaining_time = self.time_limit
 
         #^ Checks Remaining Time: 
-        if (self.time_limit > 10 or self.time_limit < 0):
+        if (self.time_limit > 10 or self.time_limit < 0): # If the time remaining is unlimited or more than 10 seconds
             colour = "green"
         else:
-            colour = "red"
+            colour = "red" # If the time remaining is 0 to 9 seconds
+
+        #^ Check Power Up:
+        power_up_type = "None" # Powerups are initiated to be none
+        if (self.player.faster): # Checks if the power up received is increased speed
+            power_up_type = "Speed" # This is assigned so it can be printed later
            
-        canvas.draw_text(f'Kills: {self.kill_counter}      Size: {self.player.radius}      Time: {remaining_time}', (20, 13), 18, colour)
+        canvas.draw_text(f'Kills: {self.kill_counter}       Size: {self.player.radius}      Time: {remaining_time}      Power Up: {power_up_type}', (20, 13), 18, colour)
     
     #^ Update:
     def update(self):
@@ -217,10 +222,12 @@ class Interaction:
         self.player.update()
         self.bounce(self.player)  
         self.player_controls()
-        if (self.player.radius <= 5):
-            self.player.move = False
-        elif (self.player.radius > 5):
-            self.player.move = True
+
+        #^ Check Enough Mass: 
+        if (self.player.radius <= 5): # Less than 6 means that there is no enough mass to move manually
+            self.player.move = False # Indiacates that cannot manually move
+        elif (self.player.radius > 5): # Greater than 5 means that the player can move manually
+            self.player.move = True # Indicates that the player can move
 
     def player_controls(self):
         """Moves the player according the key being pressed. 
@@ -270,19 +277,19 @@ class Interaction:
             Once the calculation is complete, a mass object is added to the list. 
             It takes the position calculated before, the negative velocity of player (opposite direction) and the colour. 
             """
-        mass_velocity = self.player.velocity.copy().negate()
+        mass_velocity = self.player.velocity.copy().negate() # Velocity of the mass is the opposite direction from the player, therefore velocity is negated. 
         mass_radius = 2
 
-        if (mass_velocity.get_p()[0] == 0):
-            mass_velocity += Vector(1, 0)
-        elif (mass_velocity.get_p()[1] == 0):
-            mass_velocity += Vector(0, 1)
+        if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
+            mass_velocity += Vector(1, 0) # Increment 1 to x component to avoid errors later on
+        elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
+            mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
 
         mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
-        mass_position = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy()
+        mass_position = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy() # Computes the actual position of the mass
 
-        self.mass.append(Mass((mass_position), mass_velocity, "Aqua"))
-        self.player.set_radius(self.player.radius - mass_radius)          
+        self.mass.append(Mass((mass_position), mass_velocity, "Aqua")) # Creates a new mass object which is added to the list
+        self.player.set_radius(self.player.radius - mass_radius) # Decrements the radius of the player 
 
     def update_enemy(self):
         """Update the enemies. 
@@ -344,26 +351,30 @@ class Interaction:
             A for loop is used to iterate over the list of powerups. 
             For each power up object, it is checked whether there has been a collision. 
             If there has a been a collision, then the player object receives a power up and the current power up object is removed from the list. 
+            Once the player receives the power up, the timer which defines how long it will last will be created. 
             """
-        for power_up in self.power_ups:
-            if self.hit_ball(self.player, power_up):
-                self.power_ups.remove(power_up)
-                self.player.faster = True
+        for power_up in self.power_ups: # Iterate over the power up objects in the list
+            if self.hit_ball(self.player, power_up): # Check if the current power up has collided with player
+                self.power_ups.remove(power_up) # Remeve the power up from the list 
+                self.player.faster = True # Makes the player faster
+                self.player_power_up_timer.start() # Starts the timer for how long the power up lasts for
 
     def add_power_up(self):
         """Creates power up objects. 
             This is called from `self.power_up_timer_create` which will create a new power up at a set time interval. 
             The maximum number of power ups is 5 after which point no more power ups will be added. 
-            An if statement is used if the number of power ups (in the list) has reached the limit. 
+            An if statement is used if the number of power ups (in the list) is bellow the maximum limit. 
+            If it is bellow the limit, then new power up objects are spawned at random locations within the map. 
             """
-        if (len(self.power_ups) < 5):
-            self.power_ups.append(Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)), 5))
+        max_number_power_ups = 5
+        if (len(self.power_ups) < max_number_power_ups): # Checks if the number of power ups in the map is less than the maximum allowed
+            self.power_ups.append(Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)), 5)) # Create a new power up at a random place within the map
 
     def countdown(self):
         """Counts down the timer set.
-            Uses the counter to keep track of how many times the method is called. 
-            The modulus is used to compute one second based on the counter.
-            For every second, the time limit is decremented. 
+            This method decrements the time limit for the game. 
+            Each time this is called from `self.time_count` the time limit decreases. 
+            Other methods will check this `self.time_limit` to execute the required actions. 
             """
         self.time_limit -= 1
 
@@ -371,7 +382,8 @@ class Interaction:
         """Resets player power up. 
             Called from `self.player_power_up_timer` timer. 
             """
-        self.player.faster = False
+        self.player.faster = False # Reset the power up (no more power up)
+        self.player_power_up_timer.stop() # Stops the timer (until a new power up is received) 
 
     #^ Mechanics:
     def gravity(self, ball1, ball2):
@@ -421,7 +433,7 @@ class Interaction:
                 `(Boolean)`: whether a collision has occurred.
             """
         distance = ball1.position.copy().subtract(ball2.position)
-        return (distance.length() < (ball1.radius + ball2.radius))
+        return (distance.length() < (ball1.radius + ball2.radius)) # Check if the distance from the centres is less than the sum of radii 
 
     def engulf(self, ball1, ball2):
         """Engulf ball. 
