@@ -171,7 +171,7 @@ class Interaction:
         else:
             colour = "red" # If the time remaining is 0 to 9 seconds
            
-        canvas.draw_text(f'Kills: {self.kill_counter}       Size: {self.player.radius}      Time: {remaining_time}      Power Up: {self.player.power_up}', (20, 13), 18, colour)
+        canvas.draw_text(f'Kills: {self.kill_counter}       Size: {round(self.player.radius, 1)}      Time: {remaining_time}      Power Up: {self.player.power_up}', (20, 13), 18, colour)
     
     #^ Update:
     def update(self):
@@ -222,9 +222,10 @@ class Interaction:
         self.player_controls()
 
         #^ Check Enough Mass: 
-        if (self.player.radius <= 5): # Less than 6 means that there is no enough mass to move manually
+        radius_limit = 10
+        if (self.player.radius <= radius_limit): # Less than 6 means that there is no enough mass to move manually
             self.player.move = False # Indiacates that cannot manually move
-        elif (self.player.radius > 5): # Greater than 5 means that the player can move manually
+        elif (self.player.radius > radius_limit): # Greater than 5 means that the player can move manually
             self.player.move = True # Indicates that the player can move
 
     def player_controls(self):
@@ -253,13 +254,13 @@ class Interaction:
             self.player.velocity.add(Vector(1, 0))
             self.eject_mass()
         if (self.keyboard.left) and (self.player.velocity.get_p()[0] > -velocity_limit) and (self.player.move): #* Left
-            self.player.velocity.add(Vector(-1,0))
+            self.player.velocity.add(Vector(-1, 0))
             self.eject_mass()
         if (self.keyboard.up) and (self.player.velocity.get_p()[1] > -velocity_limit) and (self.player.move): #* Up
-            self.player.velocity.add(Vector(0,-1))
+            self.player.velocity.add(Vector(0, -1))
             self.eject_mass()
         if (self.keyboard.down) and (self.player.velocity.get_p()[1] < velocity_limit) and (self.player.move): #* Down 
-            self.player.velocity.add(Vector(0,+1))
+            self.player.velocity.add(Vector(0, 1))
             self.eject_mass()
 
     def eject_mass(self): 
@@ -280,7 +281,7 @@ class Interaction:
             Each mass is 0.2 radii and 5 are created for each movement. 
             """
         mass_velocity = self.player.velocity.copy().negate() # Velocity of the mass is the opposite direction from the player, therefore velocity is negated. 
-        mass_radius = 2
+        mass_radius = 0.2
 
         if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
             mass_velocity += Vector(1, 0) # Increment 1 to x component to avoid errors later on
@@ -290,7 +291,7 @@ class Interaction:
         mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
         mass_position = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy() # Computes the actual position of the mass
 
-        self.mass.append(Mass((mass_position), mass_velocity)) # Creates a new mass object which is added to the list
+        self.mass.append(Mass((mass_position), mass_velocity, mass_radius)) # Creates a new mass object which is added to the list
         self.player.set_radius(self.player.radius - mass_radius) # Decrements the radius of the player 
 
     def update_enemy(self):

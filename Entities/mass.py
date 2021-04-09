@@ -6,7 +6,7 @@ class Mass (Ball):
         When the object itself chooses to change directions, then mass is ejected making the original ball smaller. 
         Mass is sub-class of Ball which means that it inherits the functionalities such as movement and bounce. 
         """
-    def __init__ (self, position, velocity):
+    def __init__ (self, position, velocity, radius):
         """Initializes Mass object.
             Mass will have the same functionality of Ball but will have some extra.  
             
@@ -19,7 +19,7 @@ class Mass (Ball):
         super().__init__(position, velocity, 2) # Use the initializer from super-class
         self.type = "Mass"
         self.colour = "Aqua"
-        self.radius = 0.2
+        self.radius = radius
 
     def draw(self, canvas):
         """Draws ball and ball center.
