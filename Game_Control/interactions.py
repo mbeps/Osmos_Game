@@ -1,4 +1,5 @@
 
+from Entities.enemy import Enemy
 from Game_Control.Vector import Vector
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Entities.power_ups import Power_Up
@@ -38,6 +39,8 @@ class Interaction:
         self.player_power_up_timer = simplegui.create_timer(10_000, self.reset_player_power_up) # How long the power up will last
         self.power_up_timer_create = simplegui.create_timer(20_000, self.add_power_up) # Create a power up object every set time
         self.power_up_timer_create.start()
+        self.enemy_split_timer = simplegui.create_timer(60_000, self.enemy_split) # Split the enemy every minute
+        self.enemy_split_timer.start()
 
     #^ Draw:  
     def draw(self, canvas):
@@ -326,6 +329,50 @@ class Interaction:
                 if self.hit_ball(enemy, mass): # Check if there has been a collision between current mass and current enemy
                     self.engulf(enemy, mass) # If true then mass is engulfed by the enemy
 
+    def enemy_split(self):
+        """Splits the enemy objects into smaller ones. 
+            For each enemy in the list, the radius is checked. 
+            If the radius is too small, then the enemy is not split. Otherwise, the enemies will become too small. 
+
+            When spliting, the enemy will become slower. 
+            To counter this, the velocity is multiplied. 
+            This also means that the new enemy will be faster. 
+            The enemies will get exponentially fast. 
+            A limiter is implemented so that the velocity is not increased once the speed (not velocity only magnitude) limit is reached. 
+
+            The radius of the new enemy object is random from range `5` to 5 less than the radius of the current enemy. 
+            The range cannot be too small otherwise the new enemy will be too small and the current enemy will not decrease that much. 
+            Once a radius is picked, the radius of the current enemy will be decreased by the same amount. 
+
+            The new enemy is spawned on the opposite side of the direction of the current enemy object. 
+            The formula `(current enemy radius + new enemy radius) × (-current velocity / |current velocity|)` finds the opposite circumference which is the position of new enemy object. 
+
+            When current enemy moves in the opposite direction, the velocity of the new enemy could become 0 which will cause error. 
+            An if statement checks if the `x` or `y` are 0 and increments if condition is met. 
+
+            Once the calculation is complete, a new enemy object is added to the list. 
+            It takes the position calculated before, the negative velocity of current enemy (opposite direction) and the radius. 
+            """
+        for enemy in self.enemy:
+            if (enemy.radius >= 15): # Only splits when the radius is less than 15
+                if (enemy.velocity.length() < 5): # Checks if the speed is less than 5
+                    enemy.velocity.multiply(1.5) # Multiply the speed 1.5 to supplement the decrease in speed  
+                
+                mass_velocity = enemy.velocity.copy().negate() 
+                new_enemy_radius = random.randint(5, enemy.radius - 5) # New enemy radius is random
+
+                if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
+                    mass_velocity += Vector(1, 0) # Increment 1 to x component to avoid errors later on
+                elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
+                    mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
+
+                mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
+                mass_position = ((enemy.radius + new_enemy_radius) * mass_velocity_unit) + enemy.position.copy() # Computes the actual position of the new enemy
+
+                self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius)) # Creates a new enemy object which is added to the list
+                enemy.set_radius(enemy.radius - new_enemy_radius) # Decrements the radius of the player 
+        
+
     def update_mass(self):
         """Update the mass. 
             Method handles updating the position of the mass and bouncing upon collision with walls. 
@@ -547,6 +594,7 @@ class Interaction:
         self.power_up_timer_create.stop()
         self.time_count.stop()
         self.player_power_up_timer.stop()
+        self.enemy_split_timer.stop()
 
 # A bug is present where the enemies will infinitely get larger if the plater is eaten.
 # Terminating the game is a workaround. 
