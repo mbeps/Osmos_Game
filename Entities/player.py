@@ -15,5 +15,5 @@ class Player (Ball):
         self.type = "player"
         self.colour = "green"
         self.alive = True
-        self.faster = False
         self.move = True
+        self.power_up = "None" #* (None / Speed). More can be added

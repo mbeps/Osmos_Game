@@ -167,13 +167,8 @@ class Interaction:
             colour = "green"
         else:
             colour = "red" # If the time remaining is 0 to 9 seconds
-
-        #^ Check Power Up:
-        power_up_type = "None" # Powerups are initiated to be none
-        if (self.player.faster): # Checks if the power up received is increased speed
-            power_up_type = "Speed" # This is assigned so it can be printed later
            
-        canvas.draw_text(f'Kills: {self.kill_counter}       Size: {self.player.radius}      Time: {remaining_time}      Power Up: {power_up_type}', (20, 13), 18, colour)
+        canvas.draw_text(f'Kills: {self.kill_counter}       Size: {self.player.radius}      Time: {remaining_time}      Power Up: {self.player.power_up}', (20, 13), 18, colour)
     
     #^ Update:
     def update(self):
@@ -248,7 +243,7 @@ class Interaction:
             """
         velocity_limit = 5
 
-        if (self.player.faster == True): # Set to true when player receives power up
+        if (self.player.power_up == "Speed"): # Specify the power up received
             velocity_limit = 10
 
         if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit) and (self.player.move): #* Right
@@ -264,7 +259,7 @@ class Interaction:
             self.player.velocity.add(Vector(0,+1))
             self.eject_mass()
 
-    def eject_mass(self): #! Not working
+    def eject_mass(self): #! BUG: Creates 5 mass objects instead of 1
         """Each time the player manually moves mass is created. 
             Mass will move in the opposite direction to emulate Newton's Laws. 
 
@@ -356,7 +351,7 @@ class Interaction:
         for power_up in self.power_ups: # Iterate over the power up objects in the list
             if self.hit_ball(self.player, power_up): # Check if the current power up has collided with player
                 self.power_ups.remove(power_up) # Remeve the power up from the list 
-                self.player.faster = True # Makes the player faster
+                self.player.power_up = "Speed" # Makes the player faster
                 self.player_power_up_timer.start() # Starts the timer for how long the power up lasts for
 
     def add_power_up(self):
@@ -382,7 +377,7 @@ class Interaction:
         """Resets player power up. 
             Called from `self.player_power_up_timer` timer. 
             """
-        self.player.faster = False # Reset the power up (no more power up)
+        self.player.power_up = "None" # Reset the power up (no more power up)
         self.player_power_up_timer.stop() # Stops the timer (until a new power up is received) 
 
     #^ Mechanics:
