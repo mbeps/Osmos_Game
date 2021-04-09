@@ -13,6 +13,8 @@ The game developed is called Osmos. The objective of this game is for the player
 - Power ups increase player speed for limited time.
 - Time limit (can be unlimited).
 - Display scores with.
+- Mass is ejected from player when moving using arrow keys. 
+- Enemy is split after a set time to make the game play more fair. 
 
 ## Controls:
 - **Left arrow (←)** - player moves left
