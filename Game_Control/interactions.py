@@ -414,7 +414,7 @@ class Interaction:
             """
         max_number_power_ups = 5
         if (len(self.power_ups) < max_number_power_ups): # Checks if the number of power ups in the map is less than the maximum allowed
-            self.power_ups.append(Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)), 5)) # Create a new power up at a random place within the map
+            self.power_ups.append(Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)))) # Create a new power up at a random place within the map
 
     def countdown(self):
         """Counts down the timer set.

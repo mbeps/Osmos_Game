@@ -32,7 +32,8 @@ class Ball:
             """
         canvas.draw_circle(self.position.get_p(), self.radius, 1, self.colour, self.colour) # Draws ball as circle
         canvas.draw_point(self.position.get_p(), self.colour) # Draws point as the center of the ball
-        canvas.draw_text(str(round(self.radius)), self.position.get_p(), 14, "Yellow") # Draw ball size at the centre of the ball
+        if (self.radius > 5):
+            canvas.draw_text(str(round(self.radius)), self.position.get_p(), 14, "Yellow") # Draw ball size at the centre of the ball
         """Adding sprites by overlay. 
             This is more easily implemented as the removing circle will not break any dependencies. 
             The image will dynamically change size as the circle size changes. 
