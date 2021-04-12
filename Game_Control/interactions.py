@@ -336,7 +336,8 @@ class Interaction:
 
     def enemy_split(self):
         """Splits the enemy objects into smaller ones. 
-            For each enemy in the list, the radius is checked. 
+            When the method is called, a random enemy will be split. 
+            This is done by spliting a selecting a random number from the first to last index from list where enemies are stored. 
             If the radius is too small, then the enemy is not split. Otherwise, the enemies will become too small. 
 
             When spliting, the enemy will become slower. 
@@ -358,24 +359,24 @@ class Interaction:
             Once the calculation is complete, a new enemy object is added to the list. 
             It takes the position calculated before, the negative velocity of current enemy (opposite direction) and the radius. 
             """
-        for enemy in self.enemy:
-            if (enemy.radius >= 15): # Only splits when the radius is less than 15
-                if (enemy.velocity.length() < 5): # Checks if the speed is less than 5
-                    enemy.velocity.multiply(1.5) # Multiply the speed 1.5 to supplement the decrease in speed  
-                
-                mass_velocity = enemy.velocity.copy().negate() 
-                new_enemy_radius = random.randint(5, enemy.radius - 5) # New enemy radius is random
+        enemy = self.enemy[random.randint(0, len(self.enemy) - 1)]
+        if (enemy.radius >= 15): # Only splits when the radius is less than 15
+            if (enemy.velocity.length() < 5): # Checks if the speed is less than 5
+                enemy.velocity.multiply(1.5) # Multiply the speed 1.5 to supplement the decrease in speed  
+            
+            mass_velocity = enemy.velocity.copy().negate() 
+            new_enemy_radius = random.randint(5, enemy.radius - 5) # New enemy radius is random
 
-                if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
-                    mass_velocity += Vector(1, 0) # Increment 1 to x component to avoid errors later on
-                elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
-                    mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
+            if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
+                mass_velocity += Vector(1, 0) # Increment 1 to x component to avoid errors later on
+            elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
+                mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
 
-                mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
-                mass_position = ((enemy.radius + new_enemy_radius) * mass_velocity_unit) + enemy.position.copy() # Computes the actual position of the new enemy
+            mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
+            mass_position = ((enemy.radius + new_enemy_radius) * mass_velocity_unit) + enemy.position.copy() # Computes the actual position of the new enemy
 
-                self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius)) # Creates a new enemy object which is added to the list
-                enemy.set_radius(enemy.radius - new_enemy_radius) # Decrements the radius of the player 
+            self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius)) # Creates a new enemy object which is added to the list
+            enemy.set_radius(enemy.radius - new_enemy_radius) # Decrements the radius of the player 
         
     def update_mass(self):
         """Update the mass. 
