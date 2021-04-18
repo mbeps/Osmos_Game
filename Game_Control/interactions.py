@@ -1,4 +1,5 @@
 
+from math import floor
 from Entities.enemy import Enemy
 from Game_Control.Vector import Vector
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
@@ -37,9 +38,9 @@ class Interaction:
         self.time_count = simplegui.create_timer(1000, self.countdown) # Counts how many times method is called. Used for computing one second. 
         self.time_count.start()
         self.player_power_up_timer = simplegui.create_timer(10_000, self.reset_player_power_up) # How long the power up will last
-        self.power_up_timer_create = simplegui.create_timer(20_000, self.add_power_up) # Create a power up object every set time
+        self.power_up_timer_create = simplegui.create_timer(15_000, self.add_power_up) # Create a power up object every set time
         self.power_up_timer_create.start()
-        self.enemy_split_timer = simplegui.create_timer(60_000, self.enemy_split) # Split the enemy every minute
+        self.enemy_split_timer = simplegui.create_timer(30_000, self.enemy_split) # Split the enemy every minute
         self.enemy_split_timer.start()
 
     #^ Draw:  
@@ -247,9 +248,11 @@ class Interaction:
             """
         velocity_limit = 5
 
+        #^ Check Power Ups:
         if (self.player.power_up == "Speed"): # Specify the power up received
             velocity_limit = 10
 
+        #^ Keyboard Controls:
         if (self.keyboard.right) and (self.player.velocity.get_p()[0] < velocity_limit) and (self.player.move): #* Right
             self.player.velocity.add(Vector(1, 0))
             self.eject_mass()
@@ -359,13 +362,16 @@ class Interaction:
             Once the calculation is complete, a new enemy object is added to the list. 
             It takes the position calculated before, the negative velocity of current enemy (opposite direction) and the radius. 
             """
+        #^ Random Enemy:
         enemy = self.enemy[random.randint(0, len(self.enemy) - 1)]
+        
+        #^ Spliting Enemy:
         if (enemy.radius >= 15): # Only splits when the radius is less than 15
             if (enemy.velocity.length() < 5): # Checks if the speed is less than 5
                 enemy.velocity.multiply(1.5) # Multiply the speed 1.5 to supplement the decrease in speed  
             
             mass_velocity = enemy.velocity.copy().negate() 
-            new_enemy_radius = random.randint(5, enemy.radius - 5) # New enemy radius is random
+            new_enemy_radius = random.randint(5, floor(enemy.radius - 5)) # New enemy radius is random
 
             if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
                 mass_velocity += Vector(1, 0) # Increment 1 to x component to avoid errors later on
