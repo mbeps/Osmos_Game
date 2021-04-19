@@ -28,9 +28,6 @@ The game is made a using the SimpleGUI module developed by CodeSkulptor3 for Pyt
 **Resources:**
 - [CodeSkulptor3 Installation](#installation)
 - [CodeSkulptor3 Documentation](#installation)
-=======
-The game developed is called Osmos. The objective of this game is for the player to survive and kill all the enemies before the timer runs out. The bigger balls will engulf the smaller balls. This means that enemies can merge and become larger, the player will have to kill all the enemies before they merge otherwise the enemies will be too large for the player to kill. The timer is set by the player which defines how much time the player has to kill the enemies. The player is controlled using the arrow keys. All the balls in the game bounce on walls of they collide. When the player moves manually, mass is lost; this mass can be engulfed by the player and enemies. At a set time, a random enemy will split; this will make game play fairer. The player will havea to survive until the enemies split and engulf. 
->>>>>>> 23e95c2804b86234402ea17050e9cdae462f7ecc
 
 ## Rules
 - Control the player with the arrow keys.
