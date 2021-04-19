@@ -8,6 +8,7 @@
 	- [Installation](#installation)
 	- [Running](#running)
 	- [Modules & Classes](#modules--classes)
+- [Documentation](#documentation)
 	- [Game Plan](#game-plan)
 	- [Structure](#structure)
 	- [Demo Videos](#demo-videos)
@@ -99,8 +100,10 @@ python3 main.py
 **Maps:**
 - *Line* - these are the walls around the canvas which represent the boundary of the game. Ball objects bounce upon collision. 
 
+# Documentation
+This section explains how the game fundamentally works. 
 ## Game Plan
-This section explains the simple core machanics of the game. 
+This section explains the simple core mechanics of the game. 
 **Game Over**
 
 ![image](https://user-images.githubusercontent.com/58662575/115228484-bf3aa000-a109-11eb-96bf-db435ad997d8.png)
