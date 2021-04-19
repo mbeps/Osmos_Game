@@ -8,10 +8,12 @@
 	- [Installation](#installation)
 	- [Running](#running)
 	- [Modules & Classes](#modules--classes)
+	- [Game Plan](#game-plan)
+	- [Structure](#structure)
+	- [Demo Videos](#demo-videos)
 	- [License](#license)
 
 ## Introduction 
-<<<<<<< HEAD
 The game is called Osmos. The main objective is for the player to kill and engulf all the enemies. All the balls bounce against walls upon collisions. There is also gravity acting upon entities; mass objects and other enemies are attracted to each other but not the player. Since mass objects do not merge, they are never bigger than the enemies which means that they are always attracted to the enemies. Gravity acts on the bigger enemies too but the force is much weaker. 
 
 The bigger ball engulfs the smaller balls. Gravity makes it easier to engulf entities. If the player is larger than the enemy, then then the enemy is engulfed and killed. However, if the enemy is larger, then the player is killed, and the game is over. Because enemies can engulf each other and merge into a massive enemy, it makes it hard for the player to win which means that a timer has been implemented to split the enemies into smaller ones, this gives a chance for the player to win. Mass objects which are ejected by the player are also engulfed. Once a ball engulfs another, the size increases. 
@@ -96,6 +98,75 @@ python3 main.py
 
 **Maps:**
 - *Line* - these are the walls around the canvas which represent the boundary of the game. Ball objects bounce upon collision. 
+
+## Game Plan
+This section explains the simple core machanics of the game. 
+**Game Over**
+
+![image](https://user-images.githubusercontent.com/58662575/115228484-bf3aa000-a109-11eb-96bf-db435ad997d8.png)
+- Player will engulf other balls (mass or enemies) to increase size.
+- Mass will be lost to move - Mass will push in opposite direction.
+- Enemies can engolf mass - If player is engulfed then the game is over.
+
+**Bouncing**
+
+![image](https://user-images.githubusercontent.com/58662575/115228817-248e9100-a10a-11eb-90af-9be342f0869a.png)
+- All ball types of balls:
+- 	Player
+-	Enemy
+-	Particles
+-	Inheritance
+-	All balls can inherit bounce, ingulf, etc methods
+
+**Engulfing**
+
+![image](https://user-images.githubusercontent.com/58662575/115228951-4ee04e80-a10a-11eb-9297-d4316aab0e53.png)
+- If ball1 > ball2:
+-	Ball1 engulfs ball2.
+-	Else If ball2 > ball1:
+-	Ball2 engulfs ball1.
+Logic
+- If ball1 > ball2
+-	Ball1 gets mass from ball.
+-	Ball2 is removed.
+
+**Moving**
+
+![image](https://user-images.githubusercontent.com/58662575/115229070-7afbcf80-a10a-11eb-8d2e-10e66f2c5abe.png)
+- Newtons third means that the smaller mass will push the player.
+- Mass will be faster than the player as player will be bigger.
+- Both mass and player will have equal momentum
+- Enemies do not lose mass but slit after some time
+
+## Structure
+This section shows the core structure of the game. It demonstrates how components link to each other. 
+
+![image](https://user-images.githubusercontent.com/58662575/115229545-18ef9a00-a10b-11eb-880d-1aabd1ca7ba0.png)
+
+## Demo Videos
+**Winning**
+
+https://user-images.githubusercontent.com/58662575/115227623-99f96200-a108-11eb-8bc5-45f0315c8dd3.mp4
+
+**Losing**
+
+https://user-images.githubusercontent.com/58662575/115227647-a382ca00-a108-11eb-9f7a-34d79fd44100.mp4
+
+**Power Ups**
+
+https://user-images.githubusercontent.com/58662575/115227682-aed5f580-a108-11eb-9678-e0bab53afdf0.mp4
+
+**Split**
+
+https://user-images.githubusercontent.com/58662575/115227701-b6959a00-a108-11eb-958f-77df52cde2bb.mp4
+
+**Timer**
+
+https://user-images.githubusercontent.com/58662575/115227721-bf866b80-a108-11eb-9ccb-32559336015a.mp4
+
+**Gravity**
+
+https://user-images.githubusercontent.com/58662575/115227259-25bebe80-a108-11eb-812b-b5790ae7701a.mp4
 
 ## License
 MIT
