@@ -157,6 +157,7 @@ This section shows the core structure of the game. It demonstrates how component
 
 ![image](https://user-images.githubusercontent.com/58662575/115229545-18ef9a00-a10b-11eb-880d-1aabd1ca7ba0.png)
 
+
 ## Modules & Classes
 **Entities:**
 - *Ball* - the super class for enemies, player, mass, and power ups which defines the basic functionalities of a ball such as bouncing. 
