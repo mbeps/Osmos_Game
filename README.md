@@ -59,26 +59,50 @@ The game is made a using the SimpleGUI module developed by CodeSkulptor3 for Pyt
 
 https://user-images.githubusercontent.com/58662575/115227623-99f96200-a108-11eb-8bc5-45f0315c8dd3.mp4
 
+- Player wins when there are no more enemies in the game. 
+- Number of kills displayed in game. 
+
 **Losing**
 
 https://user-images.githubusercontent.com/58662575/115227647-a382ca00-a108-11eb-9f7a-34d79fd44100.mp4
+
+- When player is dead because it was killed by an enemy. 
+- Timer has ran out.
 
 **Power Ups**
 
 https://user-images.githubusercontent.com/58662575/115227682-aed5f580-a108-11eb-9678-e0bab53afdf0.mp4
 
+- If the player peeks up a power up, it will get faster temporarily.
+- Power ups spawn in random places in the canvas at certain times. 
+
 **Split**
 
 https://user-images.githubusercontent.com/58662575/115227701-b6959a00-a108-11eb-958f-77df52cde2bb.mp4
+
+- At certain times, a random enemy will be split. 
+  - Two smaller enemies will be created to give the player a chance to kill. 
+- Only split when the enemy is large. 
 
 **Timer**
 
 https://user-images.githubusercontent.com/58662575/115227721-bf866b80-a108-11eb-9ccb-32559336015a.mp4
 
+- When the timer is set, there is a time limit by which the player must win. 
+- If the timer is not set, then the game place is unlimited (until enemies are dead or player is dead). 
+- Timer is a countdown displayed in the game. 
+
 **Gravity**
 
 https://user-images.githubusercontent.com/58662575/115227259-25bebe80-a108-11eb-812b-b5790ae7701a.mp4
 
+- Enemies and mass (ejected by player) are attracted to each other. 
+- Bigger ball object has a larger pull on the smaller object. 
+- Smaller ball object attracts the larger ball but the force is only a fraction of the attraction of the larger ball on the smaller. 
+- Mass objects cannot merge (engulf each other) which means that they always have a set size which is smaller than the any enemy. 
+  - Mass always strongly attracted to enemies. 
+  - Multiple mass objects in one place (when ejected from same spot by player) have enough force to significantly move large enemy object. 
+- Player does not attract any ball objects. 
 
 ## Installation
 
