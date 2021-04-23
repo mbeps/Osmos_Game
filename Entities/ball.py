@@ -17,6 +17,7 @@ class Ball:
         self.radius = radius
         self.colour = "Blue"
         self.in_collision = False
+        self.type = "Ball"
 
     def draw(self, canvas):
         """Draws ball and ball center.

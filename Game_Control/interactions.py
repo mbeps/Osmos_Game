@@ -488,8 +488,10 @@ class Interaction:
             A fraction of the sum of radii is set to the ball as balls get large to quickly. 
             
             If the second (smaller) ball is the enemy, 
-            then it is removed from the list 
-            and score is incremented. 
+            then it is removed from the list. 
+            `self.increment_score()` is called to increment the score, 
+            this method checks whether the larger ball was the player and the smaller ball was the enemy. 
+            It is possible that both balls were enemies which means that the kill counter cannot be incremented. 
 
             If the second (smaller) ball is player, 
             then player is dead which means that the game is list. 
@@ -504,6 +506,7 @@ class Interaction:
             
             Calls:
                 `Ball.set_radius(sum)`: increases the size of the ball by setting the sum of the two balls to the bigger one. 
+                `self.increment_score(larger_ball, smaller_ball)`: increments the score only if the player killed / engulfed the enemy.  
             """
         sum_radii = ball1.radius + ball2.radius
         larger_ball = ball1 
@@ -519,7 +522,7 @@ class Interaction:
         
         if (smaller_ball.type == "Enemy"): # If the ball eaten (smaller ball) was the enemy
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
-            self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
+            self.increment_score(larger_ball, smaller_ball) # If larger ball is the player and smaller ball is the enemy then the score is incremented
         elif (smaller_ball.type == "Player"): # If the ball eaten (smaller ball) was the player
             self.player.alive = False # A method will check this and terminate the game   
         elif (smaller_ball.type == "Mass"): # Mass is removed from list
@@ -555,6 +558,27 @@ class Interaction:
                 ball.in_collision = False # When there is no collision then set to false so that bounce can happen later
 
     #^ Game:
+    def increment_score(self, larger_ball, smaller_ball):
+        """Increments the score if the player engulfs / kills an enemy. 
+            This method called from `self.engulf()` where the larger ball engulfs the smaller ball upon collision. 
+            The score is incremented if the player kills the enemy. 
+            For this to happen, the larger balls must be the player and the smaller ball must be the enemy. 
+
+            An if statement is used to check the type of the two balls. 
+            if the larger ball (which engulfed / killed) is the player and 
+            smaller ball (which was engulfed / killed) is the enemy then 
+            the score is incremented. 
+
+            This check is carried out because it is possible that both balls were enemies. 
+            In this case, the kill counter cannot be incremented as the player has not killed any enemies but rather the enemies have merged. 
+
+            Args:
+                larger_ball (Ball): larger ball which has engulfed the smaller ball. 
+                smaller_ball (Ball): smaller ball which is engulfed / killed by the bigger ball. 
+            """
+        if (larger_ball.type == "Player") and (smaller_ball.type == "Enemy"): # Only if player engulfed the larger enemy (from `self.engulf()` method)
+            self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
+    
     def game_finish(self):
         """Handles the end of game.
             Detects whether the game is finished. 
