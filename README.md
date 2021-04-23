@@ -179,7 +179,7 @@ Logic
 ## Structure
 This section shows the core structure of the game. It demonstrates how components link to each other. 
 
-![Blank diagram](https://user-images.githubusercontent.com/77356762/115399207-de0b6600-a1df-11eb-8fa8-f1a9a823334a.png)
+![Game Structure](https://user-images.githubusercontent.com/77356762/115402790-a69eb880-a1e3-11eb-9607-1d5dbeeee3b2.png)
 
 
 ## Modules & Classes
