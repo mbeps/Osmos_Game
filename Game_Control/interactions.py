@@ -207,27 +207,20 @@ class Interaction:
             This is handled by the `player_control()` method. 
 
             Since the player loses mass to change direction manually, 
-            an if statement is used to check if there is enough mass. 
-            If there is not, the player cannot change direction until it has enough mass. 
-            The radius is checked for this operation. 
+            `Player.can_move()` is called to check if there is enough mass to move. 
 
             There is a single player which is updated normally. 
 
             Calls:
                 `Player.update()`: handles updating the position of the player object. 
+                `Player.can_move()`: checks whether there is enough mass to move. 
                 `self.bounce()`: handles the updating the velocity of the player upon collision with wall. 
                 `self.player_control()`: moves the player using keypresses by updating the position. 
             """
         self.player.update()
         self.bounce(self.player)  
         self.player_controls()
-
-        #^ Check Enough Mass: 
-        radius_limit = 10
-        if (self.player.radius <= radius_limit): # Less than 6 means that there is no enough mass to move manually
-            self.player.move = False # Indiacates that cannot manually move
-        elif (self.player.radius > radius_limit): # Greater than 5 means that the player can move manually
-            self.player.move = True # Indicates that the player can move
+        self.player.can_move()
 
     def player_controls(self):
         """Moves the player according the key being pressed. 
@@ -523,6 +516,7 @@ class Interaction:
 
         #^ Erasing Engulfed Ball
         larger_ball.set_radius(sum_radii) # Fraction of the sum of the balls set to ball 1
+        
         if (smaller_ball.type == "Enemy"): # If the ball eaten (smaller ball) was the enemy
             self.enemy.remove(smaller_ball) # The ball is removed from enemy list
             self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
