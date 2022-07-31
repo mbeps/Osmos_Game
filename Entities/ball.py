@@ -1,10 +1,13 @@
 
+from Game_Control.Vector import Vector
+
+
 class Ball:
     """Ball object are the entities in the game such as player, enemies and mass.
         Ball class is the super class of player, enemies and mass class. 
         Ball objects move around the canvas and bounce against walls. 
         """
-    def __init__(self, position, velocity, radius):
+    def __init__(self, position: Vector, velocity: Vector, radius: int) -> None:
         """Initializes ball object.
             
             Args:
@@ -12,14 +15,14 @@ class Ball:
                 `velocity (Vector)`: direction of the ball
                 `radius (int)`: size of the radius 
             """
-        self.position = position
-        self.velocity = velocity
-        self.radius = radius
-        self.colour = "Blue"
-        self.in_collision = False
-        self.type = "Ball"
+        self.position: Vector = position
+        self.velocity: Vector = velocity
+        self.radius: int = radius
+        self.colour: str = "Blue"
+        self.in_collision: bool = False
+        self.type: str = "Ball"
 
-    def draw(self, canvas):
+    def draw(self, canvas) -> None:
         """Draws ball and ball center.
             Draws circles to represent ball, it takes the initial position, radius and colour. 
             Draws point which represents center of the circle for easier compuration later. It takes initial position and colour as argument. 
@@ -40,9 +43,9 @@ class Ball:
             The image will dynamically change size as the circle size changes. 
             """  
 
-    def bounce(self, normal):
+    def bounce(self, normal: int) -> Vector:
         """Bounces the ball when wall is hit. 
-            The ball bounces on the wall by reflecting velocity componenets along normal of the wall. 
+            The ball bounces on the wall by reflecting velocity components along normal of the wall. 
             
             Args:
                 `normal (int)`: perpendicular of wall.
@@ -59,7 +62,7 @@ class Ball:
             """
         self.position.add(self.velocity) # Add the velocity to the current position to make the ball move
 
-    def set_radius(self, radius):
+    def set_radius(self, radius: int) -> None:
         """Set a new radius size for current object. 
 
             Args:

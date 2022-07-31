@@ -9,19 +9,19 @@ class Vector:
         self.y = y
 
     # Returns a string representation of the vector
-    def __str__(self):
+    def __str__(self) -> str:
         return "(" + str(self.x) + "," + str(self.y) + ")"
 
     # Tests the equality of this vector and another
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.x == other.x and self.y == other.y
 
     # Tests the inequality of this vector and another
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not self.__eq__(other)
 
     # Returns a tuple with the point corresponding to the vector
-    def get_p(self):
+    def get_p(self) -> tuple:
         return (self.x, self.y)
 
     # Returns a copy of the vector

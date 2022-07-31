@@ -7,7 +7,7 @@ class Power_Up (Ball):
 		When there is a collision with the player, a specific power up (speed / mass) will be given for a limited time. 
         
         """
-    def __init__ (self, position):
+    def __init__ (self, position: Vector) -> None:
         """Initializes the Power Up object. 
             Power Up class calls the initializer from Ball class which is the super-class.
             Power Up has different colour from the Ball. 
@@ -17,5 +17,5 @@ class Power_Up (Ball):
                 `velocity (Vector)`: direction of the ball.
             """
         super().__init__(position, Vector(0, 0), 5) # Use the initializer from super-class
-        self.type = "Power_Up"
-        self.colour = "Yellow"
+        self.type: str = "Power_Up"
+        self.colour: str = "Yellow"
