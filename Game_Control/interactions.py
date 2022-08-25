@@ -15,7 +15,7 @@ from Maps.line import Line
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines: list[Line], player: Player, enemy: list[Enemy], time: int, keyboard: Keyboard, frame) -> None:
+    def __init__(self, lines: list[Line], player: Player, enemy: list[Enemy], time: int, keyboard: Keyboard, frame:simplegui.Frame) -> None:
         """Initializes interaction object to handle interactions between game objects.
             
             Args:
@@ -312,7 +312,7 @@ class Interaction:
                 `self.bounce(enemy)`: handles the updating the velocity of the enemy upon collision with wall. 
                 `self.hit(enemy, enemy2)`: detects collision of the enemy with another ball (enemy, player).
                 `self.gravity(ball1, ball2)`: attracts two balls together. 
-                `self.engult(enemy, enemy2)`: once there has been a collision, bigger ball will engult the smaller ball. 
+                `self.engulf(enemy, enemy2)`: once there has been a collision, bigger ball will engulf the smaller ball. 
             """
         for enemy in self.enemy: # For each enemy object in the enemy list
             enemy.update() # Update the ball (moves the ball)
@@ -338,10 +338,10 @@ class Interaction:
     def enemy_split(self):
         """Splits the enemy objects into smaller ones. 
             When the method is called, a random enemy will be split. 
-            This is done by spliting a selecting a random number from the first to last index from list where enemies are stored. 
+            This is done by splitting a selecting a random number from the first to last index from list where enemies are stored. 
             If the radius is too small, then the enemy is not split. Otherwise, the enemies will become too small. 
 
-            When spliting, the enemy will become slower. 
+            When splitting, the enemy will become slower. 
             To counter this, the velocity is multiplied. 
             This also means that the new enemy will be faster. 
             The enemies will get exponentially fast. 
@@ -376,8 +376,8 @@ class Interaction:
             elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
                 mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
 
-            mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
-            mass_position = ((enemy.radius + new_enemy_radius) * mass_velocity_unit) + enemy.position.copy() # Computes the actual position of the new enemy
+            mass_velocity_unit: Vector = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
+            mass_position: Vector = ((enemy.radius + new_enemy_radius) * mass_velocity_unit) + enemy.position.copy() # Computes the actual position of the new enemy
 
             self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius)) # Creates a new enemy object which is added to the list
             enemy.set_radius(enemy.radius - new_enemy_radius) # Decrements the radius of the player 
@@ -406,7 +406,7 @@ class Interaction:
             """
         for power_up in self.power_ups: # Iterate over the power up objects in the list
             if self.hit_ball(self.player, power_up): # Check if the current power up has collided with player
-                self.power_ups.remove(power_up) # Remeve the power up from the list 
+                self.power_ups.remove(power_up) # Remove the power up from the list 
                 self.player.power_up = "Speed" # Makes the player faster
                 self.player_power_up_timer.start() # Starts the timer for how long the power up lasts for
 
@@ -459,8 +459,8 @@ class Interaction:
 
         #^ Computing Larger & Smaller Ball
         if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
-            larger_ball = ball2
-            smaller_ball = ball2
+            larger_ball: Ball = ball2
+            smaller_ball: Ball = ball2
         gravity_distance: int = larger_ball.radius * 5
         
         #^ Gravity
@@ -556,7 +556,7 @@ class Interaction:
             """
         for line in self.lines: # For each line in the line list
             distance = ball.radius + (line.thickness / 2) + 1 # Sum of the wall thickness and wall size (radius)
-            if (line.distance(ball) < distance) and (ball.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the manimum distance and collision not dealt with
+            if (line.distance(ball) < distance) and (ball.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the minimum distance and collision not dealt with
                 ball.bounce(line.normal) # Call the bounce method from ball object
                 ball.in_collision = True # Collision already dealt with therefore no sticky problem
             else: # Where there is no collision
@@ -598,7 +598,7 @@ class Interaction:
 
             The player will lose if the it has not killed all the enemies by the time the timer runs out. 
             When the timer reaches 0, the timer has run out. 
-            For the timer to be unlimited, the timer is set to be less than 0 (-1) which means that the condidion is never met. 
+            For the timer to be unlimited, the timer is set to be less than 0 (-1) which means that the condition is never met. 
 
             Checks whether the letter 'e' has been pressed. 
             If it has been pressed, the game will be terminated. 
