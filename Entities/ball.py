@@ -1,4 +1,4 @@
-
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from Game_Control.Vector import Vector
 
 
@@ -25,7 +25,7 @@ class Ball:
     def draw(self, canvas) -> None:
         """Draws ball and ball center.
             Draws circles to represent ball, it takes the initial position, radius and colour. 
-            Draws point which represents center of the circle for easier compuration later. It takes initial position and colour as argument. 
+            Draws point which represents center of the circle for easier computation later. It takes initial position and colour as argument. 
             Initial position is given as Vector type for computation. Vector is converted to tuple. 
             
             The ball will show its size (radius). 
