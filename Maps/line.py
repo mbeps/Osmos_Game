@@ -1,9 +1,13 @@
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+from Entities.ball import Ball
+from Game_Control.Vector import Vector
+
 class Line:
     """Walls are where ball objects bounce against. 
         When a ball object collides with wall, the ball object will bounce. 
         Normal of the wall is needed to make the ball bounce. 
     """
-    def __init__(self, point1, point2):
+    def __init__(self, point1: Vector, point2: Vector) -> None:
         """Initializes wall object for drawing and managing wall.
             Normal is worked out bt computing line parallel to the wall and finding the perpendicular. 
             
@@ -17,9 +21,9 @@ class Line:
         self.normal = self.unit.copy().rotate_anti()
         self.thickness = 30
         
-    def draw(self, canvas):
+    def draw(self, canvas: simplegui.Canvas) -> None:
         """Draws line as wall. 
-            Takes start point and end point as argument to draw the line between given point. Thickess and colour are also added.  
+            Takes start point and end point as argument to draw the line between given point. Thickness and colour are also added.  
             
             Args:
                 canvas (Canvas): where the game play takes place
@@ -29,7 +33,7 @@ class Line:
                          self.thickness,
                          "white")
 
-    def distance_vector(self, position):
+    def distance_vector(self, position: Vector) -> Vector:
         """Uses shortest distance from center of ball to wall as Vector object 
             Distance is computed and line projected. 
             
@@ -42,7 +46,7 @@ class Line:
         position_to_a = position.copy().subtract(self.point_a) # Shortest distance between ball and wall as vector
         return (position_to_a.get_proj(self.normal)) # Modulus of the distance 
 
-    def distance(self, ball):
+    def distance(self, ball: Ball) -> float:
         """Works out distance of the ball from ball as integer. 
             
             Args:
@@ -52,6 +56,9 @@ class Line:
                 (int): distance from ball to wall
 
             Calls:
-                distance_vector(): used to fetch the distance from ball in vector form
+                (float): distance from ball in vector form
             """
         return (self.distance_vector(ball.position).length()) # Shortest distance between ball and wall as length
+    
+    def __repr__(self) -> str:
+        return (f"{type(self).__name__}({str(self.point_a)}, {str(self.point_b)})")
