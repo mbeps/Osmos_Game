@@ -15,7 +15,7 @@ from Maps.line import Line
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines: list[Line], player: Player, enemy: list[Enemy], time: int, keyboard: Keyboard, frame:simplegui.Frame) -> None:
+    def __init__(self, lines: list[Line], player: Player, enemy: list[Enemy], keyboard: Keyboard, frame:simplegui.Frame, time: int) -> None:
         """Initializes interaction object to handle interactions between game objects.
             
             Args:
