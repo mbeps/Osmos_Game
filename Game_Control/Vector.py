@@ -123,4 +123,5 @@ class Vector:
         unit = vec.get_normalized()
         return unit.multiply(self.dot(unit))
         
-        
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}{self.x}, {self.y}"
