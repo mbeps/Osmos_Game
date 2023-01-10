@@ -15,7 +15,7 @@ from Maps.line import Line
 class Interaction:
     """Handles the interactions between game objects. 
         """
-    def __init__(self, lines: list[Line], player: Player, enemy: list[Enemy], time: int, keyboard: Keyboard, frame:simplegui.Frame) -> None:
+    def __init__(self, lines: list[Line], player: Player, enemy: list[Enemy], keyboard: Keyboard, frame:simplegui.Frame, time: int = -1) -> None:
         """Initializes interaction object to handle interactions between game objects.
             
             Args:
@@ -73,7 +73,7 @@ class Interaction:
         self.draw_map(canvas)
         self.draw_score(canvas)
     
-    def draw_player(self, canvas) -> None:
+    def draw_player(self, canvas: simplegui.Canvas) -> None:
         """Draws the player in the canvas.
             The player is drawn only if the it is alive. 
             If the player is not alive, then the it will not be drawn. 
@@ -88,7 +88,7 @@ class Interaction:
         if (self.player.alive): # Check whether player object drawn if alive
             self.player.draw(canvas)
 
-    def draw_enemy(self, canvas) -> None:
+    def draw_enemy(self, canvas: simplegui.Canvas) -> None:
         """Draws the enemies. 
             There are multiple enemy objects stored in the list. 
             A for loop is used to iterate over each enemy in the list. 
@@ -103,7 +103,7 @@ class Interaction:
         for enemy in self.enemy: # For each ball stored in the ball list
             enemy.draw(canvas) # Draw the current ball
 
-    def draw_mass(self, canvas) -> None:
+    def draw_mass(self, canvas: simplegui.Canvas) -> None:
         """Draws the enemies. 
             There are multiple mass objects stored in the list. 
             A for loop is used to iterate over each mass in the list. 
@@ -118,7 +118,7 @@ class Interaction:
         for mass in self.mass: # Iterates over each mass in the list
             mass.draw(canvas)
 
-    def draw_power_ups(self, canvas) -> None:
+    def draw_power_ups(self, canvas: simplegui.Canvas) -> None:
         """Draws the power ups.
             There are multiple power ups objects stored in the list. 
             A for loop is used to iterate over each power up in the list. 
@@ -133,7 +133,7 @@ class Interaction:
         for power_up in self.power_ups:
             power_up.draw(canvas)    
 
-    def draw_map(self, canvas) -> None:
+    def draw_map(self, canvas: simplegui.Canvas) -> None:
         """Draws the walls around the canvas. 
             The walls (thick lines) are used to as boundaries for ball objects. 
             The ball objects bounce upon collision with the wall. 
@@ -150,7 +150,7 @@ class Interaction:
         for line in self.lines: # For each line stored in the line list
             line.draw(canvas) # Draw the current line 
 
-    def draw_score(self, canvas) -> None:
+    def draw_score(self, canvas: simplegui.Canvas) -> None:
         """Draws score as text. 
             Draws the number of enemies killed (engulfed) by the player. 
             Draws the size of the player by using the radius of the player. 

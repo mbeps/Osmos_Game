@@ -6,7 +6,7 @@ from modules import *
 if __name__=="__main__":
 	#^ Game Environment:
 	canvas_dimensions: list[int] = [1456, 819] # Default canvas size (16:9)
-	time_limit: Literal[-1] = -1 # Default time is unlimited 
+	time_limit: int = 10 # Default time is unlimited 
 
 	#^ Entities:
 	enemies: list[Enemy] = [Enemy(Vector(200, 150), Vector(-3, -3), 30), 
@@ -23,12 +23,11 @@ if __name__=="__main__":
 
 	#^ Backend:
 	keyboard: Keyboard = Keyboard()
-	interaction: Interaction = Interaction(lines, player, enemies, time_limit, keyboard, frame)
+	interaction: Interaction = Interaction(lines, player, enemies, keyboard, frame, time_limit)
 
 	#^ Handlers:
 	frame.set_draw_handler(interaction.draw)
 	frame.set_keydown_handler(keyboard.keyDown)
 	frame.set_keyup_handler(keyboard.keyUp)
 	frame.add_button("Exit Game", interaction.stop)
-	frame.start() # Test
-# Test
+	frame.start() 
