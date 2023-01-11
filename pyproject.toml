@@ -4,6 +4,10 @@ version = "0.1.0"
 description = "Osmos game"
 authors = ["Maruf Bepary <bepary71@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/mbeps/Osmos_Game"
+repository = "https://github.com/mbeps/Osmos_Game"
+keywords = ["game", "osmos"]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
