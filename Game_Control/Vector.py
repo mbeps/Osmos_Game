@@ -10,7 +10,7 @@ class Vector:
 
     # Returns a string representation of the vector
     def __str__(self) -> str:
-        return f"({str(self.x)}, {str(self.y)})"
+        return "(" + str(self.x) + "," + str(self.y) + ")"
 
     # Tests the equality of this vector and another
     def __eq__(self, other) -> bool:
@@ -123,5 +123,4 @@ class Vector:
         unit = vec.get_normalized()
         return unit.multiply(self.dot(unit))
         
-    def __repr__(self) -> str:
-        return f"{type(self).__name__}{self.x}, {self.y}"
+        

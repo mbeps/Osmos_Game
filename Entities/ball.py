@@ -22,7 +22,7 @@ class Ball:
         self.in_collision: bool = False
         self.type: str = "Ball"
 
-    def draw(self, canvas: simplegui.Canvas) -> None:
+    def draw(self, canvas) -> None:
         """Draws ball and ball center.
             Draws circles to represent ball, it takes the initial position, radius and colour. 
             Draws point which represents center of the circle for easier computation later. It takes initial position and colour as argument. 
@@ -69,6 +69,3 @@ class Ball:
                 `radius (int)`: new radius size that needs to be assigned. 
             """
         self.radius = radius
-        
-    def __repr__(self) -> str:
-        return (f"{type(self).__name__}({str(self.position)})")
