@@ -10,8 +10,9 @@ repository = "https://github.com/mbeps/Osmos_Game"
 keywords = ["game", "osmos"]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.10"
 SimpleGUICS2Pygame = "^2.1.0"
+mypy = "^1.10.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
