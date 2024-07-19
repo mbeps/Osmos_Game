@@ -1,19 +1,22 @@
 import math
+from typing import Any
 
 # The Vector class
 class Vector:
 
     # Initialiser
-    def __init__(self, x=0, y=0):
-        self.x = x
-        self.y = y
+    def __init__(self, x: float = 0, y: float = 0) -> None:
+        self.x: float = x
+        self.y: float = y
 
     # Returns a string representation of the vector
     def __str__(self) -> str:
         return "(" + str(self.x) + "," + str(self.y) + ")"
 
     # Tests the equality of this vector and another
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Vector):
+            return NotImplemented
         return self.x == other.x and self.y == other.y
 
     # Tests the inequality of this vector and another
