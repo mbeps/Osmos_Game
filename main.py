@@ -11,7 +11,6 @@ from Entities.player import Player
 from Game_Control.interactions import Interaction
 from Game_Control.keyboard import Keyboard
 from Game_Control.Vector import Vector
-from Game_Environment.user_settings import *
 from Maps.line import Line
 
 if __name__ == "__main__":
