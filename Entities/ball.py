@@ -10,7 +10,7 @@ class Ball:
     Ball objects move around the canvas and bounce against walls.
     """
 
-    def __init__(self, position: Vector, velocity: Vector, radius: int) -> None:
+    def __init__(self, position: Vector, velocity: Vector, radius: float) -> None:
         """Initializes ball object.
 
         Args:
@@ -52,7 +52,7 @@ class Ball:
             The image will dynamically change size as the circle size changes. 
             """
 
-    def bounce(self, normal: float) -> Vector:
+    def bounce(self, normal: Vector) -> Vector:
         """Bounces the ball when wall is hit.
         The ball bounces on the wall by reflecting velocity components along normal of the wall.
 

@@ -10,7 +10,7 @@ class Mass(Ball):
     Mass is sub-class of Ball which means that it inherits the functionalities such as movement and bounce.
     """
 
-    def __init__(self, position: Vector, velocity: Vector, radius: int) -> None:
+    def __init__(self, position: Vector, velocity: Vector, radius: float) -> None:
         """Initializes Mass object.
         Mass will have the same functionality of Ball but will have some extra.
 
@@ -20,7 +20,7 @@ class Mass(Ball):
         super().__init__(position, velocity, 2)  # Use the initializer from super-class
         self.type: str = "Mass"
         self.colour: str = "Aqua"
-        self.radius: int = radius
+        self.radius: float = radius
 
     def draw(self, canvas: Canvas) -> None:
         """Draws ball and ball center.

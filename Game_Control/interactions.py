@@ -9,6 +9,8 @@ from Entities.mass import Mass
 import random
 from Game_Control.keyboard import Keyboard
 from SimpleGUICS2Pygame.simpleguics2pygame import Canvas, Timer
+from typing import cast
+
 
 from Maps.line import Line
 
@@ -291,8 +293,8 @@ class Interaction:
         elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
             mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
 
-        mass_velocity_unit = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
-        mass_position = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy() # Computes the actual position of the mass
+        mass_velocity_unit: Vector = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
+        mass_position: Vector = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy() # Computes the actual position of the mass
 
         self.mass.append(Mass((mass_position), mass_velocity, mass_radius)) # Creates a new mass object which is added to the list
         self.player.set_radius(self.player.radius - mass_radius) # Decrements the radius of the player 
@@ -461,9 +463,9 @@ class Interaction:
 
         #^ Computing Larger & Smaller Ball
         if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
-            larger_ball: Ball = ball2
-            smaller_ball: Ball = ball2
-        gravity_distance: int = larger_ball.radius * 5
+            larger_ball = ball2
+            smaller_ball = ball2
+        gravity_distance: float = larger_ball.radius * 5
         
         #^ Gravity
         if (distance_between_balls < (gravity_distance)): # Gravity acts when the smaller ball is inside the gravitational range of the bigger ball
@@ -506,7 +508,7 @@ class Interaction:
             If the second (smaller) ball is the mass, 
             then it is removed from the list. 
             Mass will never eat another entity as mass does not get larger because it does not engulf other mass. 
- 
+
             Args:
                 `ball1 (Ball)`: main ball.
                 `ball2 (Ball)`: can be enemy or player.
@@ -515,7 +517,7 @@ class Interaction:
                 `Ball.set_radius(sum)`: increases the size of the ball by setting the sum of the two balls to the bigger one. 
                 `self.increment_score(larger_ball, smaller_ball)`: increments the score only if the player killed / engulfed the enemy.  
             """
-        sum_radii: int = ball1.radius + ball2.radius
+        sum_radii: float = ball1.radius + ball2.radius
         larger_ball: Ball = ball1 
         smaller_ball: Ball = ball2 
 
@@ -528,12 +530,12 @@ class Interaction:
         larger_ball.set_radius(sum_radii) # Fraction of the sum of the balls set to ball 1
         
         if (smaller_ball.type == "Enemy"): # If the ball eaten (smaller ball) was the enemy
-            self.enemy.remove(smaller_ball) # The ball is removed from enemy list
+            self.enemy.remove(cast(Enemy, smaller_ball)) # The ball is removed from enemy list
             self.increment_score(larger_ball, smaller_ball) # If larger ball is the player and smaller ball is the enemy then the score is incremented
         elif (smaller_ball.type == "Player"): # If the ball eaten (smaller ball) was the player
             self.player.alive = False # A method will check this and terminate the game   
         elif (smaller_ball.type == "Mass"): # Mass is removed from list
-            self.mass.remove(smaller_ball)
+            self.mass.remove(cast(Mass, smaller_ball))
 
     def bounce(self, ball: Ball) -> None:
         """Bounces the ball if there was a collision with the wall. 
