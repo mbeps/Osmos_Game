@@ -1,5 +1,6 @@
-from Game_Control.Vector import Vector
 from Entities.ball import Ball
+from Game_Control.Vector import Vector
+
 
 class Power_Up (Ball):
     """Power Up objects are supposed to give certain power ups to the player.

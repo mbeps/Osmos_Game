@@ -1,26 +1,53 @@
-[tool.poetry]
+[project]
 name = "Osmos"
 version = "0.1.0"
 description = "Osmos game"
-authors = ["Maruf Bepary <bepary71@gmail.com>"]
-license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/mbeps/Osmos_Game"
-repository = "https://github.com/mbeps/Osmos_Game"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Maruf Bepary", email = "bepary71@gmail.com" }]
 keywords = ["game", "osmos"]
+dependencies = [
+    "SimpleGUICS2Pygame>=2.1.0,<3.0.0",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.10"
-SimpleGUICS2Pygame = "^2.1.0"
-mypy = "^1.10.0"
+[project.urls]
+Homepage = "https://github.com/mbeps/Osmos_Game"
+Repository = "https://github.com/mbeps/Osmos_Game"
 
-[tool.poetry.dev-dependencies]
-flake8 = "^5.0.4"
-pytest = "^7.1.2"
+[tool.hatch.build.targets.wheel]
+packages = [
+    "Entities",
+    "Game_Control",
+    "Maps",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.10.0,<2.0.0",
+    "flake8>=5.0.4,<6.0.0",
+    "pytest>=7.1.2,<8.0.0",
+    "ruff>=0.14.9,<0.15.0",
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:pkg_resources is deprecated as an API.*:DeprecationWarning:pygame.pkgdata",
+]
+
+[tool.ruff]
+line-length = 140
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+disallow_untyped_defs = true
+disallow_any_generics = true
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-include = [
-    "LICENSE",
-]
+requires = ["hatchling>=1.22"]
+build-backend = "hatchling.build"
