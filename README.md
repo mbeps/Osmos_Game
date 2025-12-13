@@ -105,19 +105,18 @@ https://user-images.githubusercontent.com/58662575/115227259-25bebe80-a108-11eb-
 - Player does not attract any ball objects. 
 
 ## Installation
-SimpleGUI requires Python 3 to be installed. Game developed using Python 3.10. 
-[Poetry](https://python-poetry.org/) project manager has been used for managing dependencies. 
+SimpleGUI requires Python 3 to be installed. Game developed using Python 3.10. Dependencies are managed with [uv](https://docs.astral.sh/uv/).
 
 **Install Project Dependencies**
 ```
-poetry install
+uv sync --dev
 ```
 
 ## Running
 Run the `main.py` using Python 3. Make sure that you are in the directory where the game is stored. 
 
 ```
-poetry run python main.py
+uv run python main.py
 ```
 
 # **Documentation**
