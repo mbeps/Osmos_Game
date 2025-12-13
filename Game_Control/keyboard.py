@@ -17,7 +17,7 @@ class Keyboard:
         self.down: bool = False
         self.e: bool = False
 
-    def keyDown(self, key: simplegui.KEY_MAP) -> None:
+    def keyDown(self, key: int) -> None:
         """Actions when certain keys are down or being pressed (could be held down). 
             The keys that are being pressed are set to true. 
             When true, certain actions can be executed. 
@@ -36,7 +36,7 @@ class Keyboard:
         elif key == simplegui.KEY_MAP['e']:
             self.e = True
 
-    def keyUp(self, key: simplegui.KEY_MAP) -> None:
+    def keyUp(self, key: int) -> None:
         """Actions when certain keys are up or not being pressed (could be held down). 
             The keys are being set to false to indicate that they are no longer being pressed. 
             

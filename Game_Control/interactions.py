@@ -64,7 +64,7 @@ class Interaction:
         self.enemy_split_timer.start()
 
     #^ Draw:  
-    def draw(self, canvas) -> None:
+    def draw(self, canvas: Canvas) -> None:
         """Draws each element in list of objects. 
             Method calls other draw methods for the specific objects. 
             
@@ -88,7 +88,7 @@ class Interaction:
         self.draw_map(canvas)
         self.draw_score(canvas)
     
-    def draw_player(self, canvas) -> None:
+    def draw_player(self, canvas: Canvas) -> None:
         """Draws the player in the canvas.
             The player is drawn only if the it is alive. 
             If the player is not alive, then the it will not be drawn. 
@@ -189,7 +189,7 @@ class Interaction:
 
         #^ Checks Remaining Time: 
         if (self.time_limit > 10 or self.time_limit < 0): # If the time remaining is unlimited or more than 10 seconds
-            colour = "green"
+            colour: str = "green"
         else:
             colour = "red" # If the time remaining is 0 to 9 seconds
         canvas.draw_text(
@@ -267,7 +267,7 @@ class Interaction:
             Calls: 
                 `self.eject_mass()`: ejects the mass from player when position is updated manually.
             """
-        velocity_limit = 5
+        velocity_limit: int = 5
 
         #^ Check Power Ups:
         if (self.player.power_up == "Speed"): # Specify the power up received

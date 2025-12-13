@@ -5,17 +5,18 @@ from Entities.ball import Ball
 from Game_Control.keyboard import Keyboard
 from Game_Control.Vector import Vector
 from Maps.line import Line
+from tests.conftest import DummyCanvas
 
 
-def test_line_distance_computation():
-    line = Line(Vector(0, 0), Vector(0, 10))
-    ball = Ball(Vector(5, 5), Vector(0, 0), 1)
+def test_line_distance_computation() -> None:
+    line: Line = Line(Vector(0, 0), Vector(0, 10))
+    ball: Ball = Ball(Vector(5, 5), Vector(0, 0), 1)
 
     assert line.distance(ball) == pytest.approx(5)
 
 
-def test_keyboard_tracks_keypresses():
-    keyboard = Keyboard()
+def test_keyboard_tracks_keypresses() -> None:
+    keyboard: Keyboard = Keyboard()
 
     keyboard.keyDown(simplegui.KEY_MAP["right"])
     keyboard.keyDown(simplegui.KEY_MAP["up"])
