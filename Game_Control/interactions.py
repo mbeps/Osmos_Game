@@ -464,7 +464,7 @@ class Interaction:
         #^ Computing Larger & Smaller Ball
         if (ball1.radius < ball2.radius): # Works out the larger and smaller ball 
             larger_ball = ball2
-            smaller_ball = ball2
+            smaller_ball = ball1
         gravity_distance: float = larger_ball.radius * 5
         
         #^ Gravity
