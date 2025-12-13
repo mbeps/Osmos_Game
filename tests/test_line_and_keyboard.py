@@ -2,8 +2,8 @@ import pytest
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
 from Entities.ball import Ball
-from Game_Control.Vector import Vector
 from Game_Control.keyboard import Keyboard
+from Game_Control.Vector import Vector
 from Maps.line import Line
 
 

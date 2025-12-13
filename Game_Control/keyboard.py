@@ -1,6 +1,7 @@
 
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
+
 class Keyboard:
     """Keyboard class will keep track of the keys being pressed. 
         These keys presses can be used to control game entities such as the player or game setting. 

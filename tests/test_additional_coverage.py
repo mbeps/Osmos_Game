@@ -9,9 +9,9 @@ from Entities.enemy import Enemy
 from Entities.mass import Mass
 from Entities.player import Player
 from Entities.power_ups import Power_Up
-from Game_Control.Vector import Vector
 from Game_Control.interactions import Interaction
 from Game_Control.keyboard import Keyboard
+from Game_Control.Vector import Vector
 from Maps.line import Line
 from tests.conftest import DummyCanvas, DummyTimer
 

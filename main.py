@@ -1,12 +1,8 @@
 # ^ MODULES:
-import random
-from typing import Literal
 
 import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 
-from Entities.ball import Ball
 from Entities.enemy import Enemy
-from Entities.mass import Mass
 from Entities.player import Player
 from Game_Control.interactions import Interaction
 from Game_Control.keyboard import Keyboard

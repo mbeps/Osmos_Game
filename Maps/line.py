@@ -1,6 +1,7 @@
-from Game_Control.Vector import Vector
 from SimpleGUICS2Pygame.simpleguics2pygame import Canvas
+
 from Entities.ball import Ball
+from Game_Control.Vector import Vector
 
 
 class Line:

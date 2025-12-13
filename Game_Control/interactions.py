@@ -1,24 +1,32 @@
-from math import floor
-from Entities.ball import Ball
-from Entities.enemy import Enemy
-from Entities.player import Player
-from Game_Control.Vector import Vector
-import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-from Entities.power_ups import Power_Up
-from Entities.mass import Mass
 import random
-from Game_Control.keyboard import Keyboard
-from SimpleGUICS2Pygame.simpleguics2pygame import Canvas, Timer
+from math import floor
 from typing import cast
 
+import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+from SimpleGUICS2Pygame.simpleguics2pygame import Canvas, Timer
 
+from Entities.ball import Ball
+from Entities.enemy import Enemy
+from Entities.mass import Mass
+from Entities.player import Player
+from Entities.power_ups import Power_Up
+from Game_Control.keyboard import Keyboard
+from Game_Control.Vector import Vector
 from Maps.line import Line
 
 
 class Interaction:
-    """Handles the interactions between game objects. 
-        """
-    def __init__(self, lines: list[Line], player: Player, enemies: list[Enemy], time: int, keyboard: Keyboard, frame:simplegui.Frame) -> None:
+    """Handles the interactions between game objects."""
+
+    def __init__(
+        self,
+        lines: list[Line],
+        player: Player,
+        enemies: list[Enemy],
+        time: int,
+        keyboard: Keyboard,
+        frame: simplegui.Frame,
+    ) -> None:
         """Initializes interaction object to handle interactions between game objects.
             
             Args:
@@ -43,12 +51,16 @@ class Interaction:
         
         #^ Timers:
         self.time_limit: int = time # The limit for which the game will run 
-        self.time_count: Timer = simplegui.create_timer(1000, self.countdown) # Counts how many times method is called. Used for computing one second. 
+        self.time_count: Timer = simplegui.create_timer(1000, self.countdown)
         self.time_count.start()
-        self.player_power_up_timer: Timer = simplegui.create_timer(10_000, self.reset_player_power_up) # How long the power up will last
-        self.power_up_timer_create: Timer = simplegui.create_timer(15_000, self.add_power_up) # Create a power up object every set time
+        self.player_power_up_timer: Timer = simplegui.create_timer(
+            10_000, self.reset_player_power_up
+        )
+        self.power_up_timer_create: Timer = simplegui.create_timer(
+            15_000, self.add_power_up
+        )
         self.power_up_timer_create.start()
-        self.enemy_split_timer: Timer = simplegui.create_timer(30_000, self.enemy_split) # Split the enemy every minute
+        self.enemy_split_timer: Timer = simplegui.create_timer(30_000, self.enemy_split)
         self.enemy_split_timer.start()
 
     #^ Draw:  
@@ -180,14 +192,21 @@ class Interaction:
             colour = "green"
         else:
             colour = "red" # If the time remaining is 0 to 9 seconds
-           
-        canvas.draw_text(f'Kills: {self.kill_counter}       Size: {round(self.player.radius, 1)}      Time: {remaining_time}      Power Up: {self.player.power_up}', (20, 13), 18, colour)
+        canvas.draw_text(
+            (
+                f"Kills: {self.kill_counter}       Size: {round(self.player.radius, 1)}      "
+                f"Time: {remaining_time}      Power Up: {self.player.power_up}"
+            ),
+            (20, 13),
+            18,
+            colour,
+        )
     
     #^ Update:
     def update(self) -> None:
         """Updates balls in the list. 
-            This method handles updating the enemies stored in the enemy list, the single player, the mass stored in a list, and the power ups stored in a list. 
-            Each ball (player, enemy and mass) stored is an object. 
+            Handles updating the enemies, the player, the ejected mass, and any power ups.
+            Each ball (player, enemy and mass) stored is an object.
             Enemies, players, mass, and power ups are updated by calling their respective update methods. 
             
             Function to check if game is over is called for checking.
@@ -273,7 +292,8 @@ class Interaction:
             Mass will move in the opposite direction to emulate Newton's Laws. 
 
             The mass is spawned on the opposite side of the direction of the player object. 
-            The formula `(player radius + mass radius) × (- player velocity / |player velocity|)` finds the opposite circumference which is the position of mass object. 
+            The formula `(player radius + mass radius) × (- player velocity / |player velocity|)`
+            finds the opposite circumference which is the position of mass object. 
 
             When player moves in the opposite direction, the velocity of the mass could become 0 which will cause error. 
             An if statement checks if the `x` or `y` are 0 and increments if condition is met. #
@@ -285,7 +305,8 @@ class Interaction:
             Each move will cause the player to lose 1 from the radius. 
             Each mass is 0.2 radii and 5 are created for each movement. 
             """
-        mass_velocity: Vector = self.player.velocity.copy().negate() # Velocity of the mass is the opposite direction from the player, therefore velocity is negated. 
+        # Mass moves opposite to the player.
+        mass_velocity: Vector = self.player.velocity.copy().negate()
         mass_radius: float = 0.2
 
         if (mass_velocity.get_p()[0] == 0): # Checks if the x component of the velocity is 0
@@ -293,17 +314,22 @@ class Interaction:
         elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
             mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
 
-        mass_velocity_unit: Vector = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
-        mass_position: Vector = ((self.player.radius + mass_radius) * mass_velocity_unit) + self.player.position.copy() # Computes the actual position of the mass
+        mass_velocity_unit: Vector = mass_velocity.copy().divide(
+            mass_velocity.length()
+        )
+        mass_position: Vector = (
+            (self.player.radius + mass_radius) * mass_velocity_unit
+        ) + self.player.position.copy()
 
-        self.mass.append(Mass((mass_position), mass_velocity, mass_radius)) # Creates a new mass object which is added to the list
+        self.mass.append(Mass((mass_position), mass_velocity, mass_radius))
         self.player.set_radius(self.player.radius - mass_radius) # Decrements the radius of the player 
 
     def update_enemy(self) -> None:
         """Update the enemies. 
             Method handles the updating the position of the enemies and bouncing upon collision with walls. 
             To update the position of the enemy, the update method of the enemy object itself is called. 
-            Method also checks the state of the enemies by checking if there have been collisions (`hit()` method) with other enemies, mass or the player. 
+            Method also checks the state of the enemies by checking if there have been collisions
+            (`hit()` method) with other enemies, mass or the player. 
             When enemies get close to other enemies or mass, gravity is applied on the two objects. 
             If there have been collisions that the appropriate ball is engulfed. 
             
@@ -356,7 +382,8 @@ class Interaction:
             Once a radius is picked, the radius of the current enemy will be decreased by the same amount. 
 
             The new enemy is spawned on the opposite side of the direction of the current enemy object. 
-            The formula `(current enemy radius + new enemy radius) × (-current velocity / |current velocity|)` finds the opposite circumference which is the position of new enemy object. 
+            The formula `(current enemy radius + new enemy radius) × (-current velocity / |current velocity|)`
+            finds the opposite circumference which is the position of new enemy object. 
 
             When current enemy moves in the opposite direction, the velocity of the new enemy could become 0 which will cause error. 
             An if statement checks if the `x` or `y` are 0 and increments if condition is met. 
@@ -380,10 +407,14 @@ class Interaction:
             elif (mass_velocity.get_p()[1] == 0): # Checks if the y component of the velocity is 0
                 mass_velocity += Vector(0, 1) # Increment 1 to y component to avoid errors later on
 
-            mass_velocity_unit: Vector = mass_velocity.copy().divide(mass_velocity.length()) # Unit Vector = Vector / |Vector|
-            mass_position: Vector = ((enemy.radius + new_enemy_radius) * mass_velocity_unit) + enemy.position.copy() # Computes the actual position of the new enemy
+            mass_velocity_unit: Vector = mass_velocity.copy().divide(
+                mass_velocity.length()
+            )
+            mass_position: Vector = (
+                (enemy.radius + new_enemy_radius) * mass_velocity_unit
+            ) + enemy.position.copy()
 
-            self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius)) # Creates a new enemy object which is added to the list
+            self.enemy.append(Enemy(mass_position, mass_velocity, new_enemy_radius))
             enemy.set_radius(enemy.radius - new_enemy_radius) # Decrements the radius of the player 
         
     def update_mass(self) -> None:
@@ -405,7 +436,8 @@ class Interaction:
         """Checking of the power up object has collided with player object. 
             A for loop is used to iterate over the list of powerups. 
             For each power up object, it is checked whether there has been a collision. 
-            If there has a been a collision, then the player object receives a power up and the current power up object is removed from the list. 
+            If there has a been a collision, then the player object receives a power up and the current power up
+            object is removed from the list. 
             Once the player receives the power up, the timer which defines how long it will last will be created. 
             """
         for power_up in self.power_ups: # Iterate over the power up objects in the list
@@ -423,7 +455,9 @@ class Interaction:
             """
         max_number_power_ups: int = 5
         if (len(self.power_ups) < max_number_power_ups): # Checks if the number of power ups in the map is less than the maximum allowed
-            self.power_ups.append(Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)))) # Create a new power up at a random place within the map
+            self.power_ups.append(
+                Power_Up(Vector(random.randint(5, 790), random.randint(5, 490)))
+            )
 
     def countdown(self) -> None:
         """Counts down the timer set.
@@ -467,10 +501,18 @@ class Interaction:
             smaller_ball = ball1
         gravity_distance: float = larger_ball.radius * 5
         
-        #^ Gravity
-        if (distance_between_balls < (gravity_distance)): # Gravity acts when the smaller ball is inside the gravitational range of the bigger ball
-            smaller_ball.velocity.add((larger_ball.position - smaller_ball.position).divide(gravitational_force)) # Smaller ball velocity changed
-            larger_ball.velocity.add((smaller_ball.position - larger_ball.position).divide(gravitational_force * 5)) # Bigger ball velocity changed (5 times weaker)
+        #^ Gravity: applies when the smaller ball is inside the larger ball's range
+        if (distance_between_balls < gravity_distance):
+            smaller_ball.velocity.add(
+                (larger_ball.position - smaller_ball.position).divide(
+                    gravitational_force
+                )
+            )
+            larger_ball.velocity.add(
+                (smaller_ball.position - larger_ball.position).divide(
+                    gravitational_force * 5
+                )
+            ) # Bigger ball velocity changed (5 times weaker)
     
     def hit_ball(self, ball1: Ball , ball2: Ball) -> bool:
         """Detects collision between 2 balls. 
@@ -531,7 +573,7 @@ class Interaction:
         
         if (smaller_ball.type == "Enemy"): # If the ball eaten (smaller ball) was the enemy
             self.enemy.remove(cast(Enemy, smaller_ball)) # The ball is removed from enemy list
-            self.increment_score(larger_ball, smaller_ball) # If larger ball is the player and smaller ball is the enemy then the score is incremented
+            self.increment_score(larger_ball, smaller_ball) # Update score when player eats an enemy
         elif (smaller_ball.type == "Player"): # If the ball eaten (smaller ball) was the player
             self.player.alive = False # A method will check this and terminate the game   
         elif (smaller_ball.type == "Mass"): # Mass is removed from list
@@ -543,10 +585,9 @@ class Interaction:
             The distance between the center and wall is computed to check if there was a collision. 
             If the distance between the wall and the ball is less than the maximum distance then there has been a collision. 
 
-            `in_collision` variable keeps track of whether there has been a collision before. 
-            This is done to prevent the sticky problem where the ball is stuck in the wall. 
-            If there is a previous collision and another one happens at the same time, then collision is not handles therefore no bounce. 
-            After the collision takes place and there is no other collision, then the variable is set to false so that the next collision can be handled. 
+            `in_collision` tracks whether a collision was just handled to prevent the ball sticking to the wall.
+            If another collision happens at the same time, the bounce is skipped.
+            After a clean frame the flag is reset so future collisions can be handled. 
             
             The ball is the super-class of enemy, player and mass.
             This method will work for any dub-classes of ball. 
@@ -557,10 +598,10 @@ class Interaction:
             Calls: 
                 `Line.distance(ball)`: works out the distance between the ball object (player, enemy). 
                 `Ball.bounce(line.normal)`: reflect the velocity of the ball along normal to simulate a bounce. 
-            """
+        """
         for line in self.lines: # For each line in the line list
             distance: float = ball.radius + (line.thickness / 2) + 1 # Sum of the wall thickness and wall size (radius)
-            if (line.distance(ball) < distance) and (ball.in_collision == False): # Collision: if the current distance of center of ball and wall is less than the minimum distance and collision not dealt with
+            if (line.distance(ball) < distance) and (not ball.in_collision):
                 ball.bounce(line.normal) # Call the bounce method from ball object
                 ball.in_collision = True # Collision already dealt with therefore no sticky problem
             else: # Where there is no collision
@@ -579,14 +620,14 @@ class Interaction:
             the score is incremented. 
 
             This check is carried out because it is possible that both balls were enemies. 
-            In this case, the kill counter cannot be incremented as the player has not killed any enemies but rather the enemies have merged. 
+            In that case the kill counter is not incremented because the enemies merged without the player. 
 
             Args:
                 larger_ball (Ball): larger ball which has engulfed the smaller ball. 
                 smaller_ball (Ball): smaller ball which is engulfed / killed by the bigger ball. 
             """
-        if (larger_ball.type == "Player") and (smaller_ball.type == "Enemy"): # Only if player engulfed the larger enemy (from `self.engulf()` method)
-            self.kill_counter += 1 # Increment kill counter to be displayed on canvas on another method
+        if (larger_ball.type == "Player") and (smaller_ball.type == "Enemy"):
+            self.kill_counter += 1 # Player engulfed an enemy
     
     def game_finish(self) -> None:
         """Handles the end of game.
@@ -609,11 +650,11 @@ class Interaction:
 
             Calls:
                 `stop()`: terminates the game and all the handlers (timer, frame).
-            """
+        """
         if (len(self.enemy) == 0): # Checks if all the enemies are dead
             self.stop()
             print("You Won")
-        elif (self.player.alive == False): # Checks if the player is dead
+        elif not self.player.alive: # Checks if the player is dead
             self.stop()
             print("Game Over. You Lost.")
         elif (self.time_limit == 0): # Checks if the timer has ran out

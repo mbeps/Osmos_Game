@@ -1,11 +1,6 @@
-import pathlib
-import sys
 import types
-import pytest
 
-ROOT_DIR = pathlib.Path(__file__).resolve().parents[1]
-if str(ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(ROOT_DIR))
+import pytest
 
 import Game_Control.interactions as interactions
 
@@ -97,9 +92,9 @@ def lines_square():
 def interaction_factory(simplegui_stub, frame_stub, lines_square):
     from Entities.enemy import Enemy
     from Entities.player import Player
-    from Game_Control.Vector import Vector
-    from Game_Control.keyboard import Keyboard
     from Game_Control.interactions import Interaction
+    from Game_Control.keyboard import Keyboard
+    from Game_Control.Vector import Vector
 
     def factory(
         player=None,

@@ -1,6 +1,7 @@
 from Entities.ball import Ball
 from Game_Control.Vector import Vector
 
+
 class Player (Ball):
     """Creates Player object.
         Player will have the same functionality of Ball but will have some extra. 

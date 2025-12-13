@@ -35,6 +35,13 @@ filterwarnings = [
     "ignore:pkg_resources is deprecated as an API.*:DeprecationWarning:pygame.pkgdata",
 ]
 
+[tool.ruff]
+line-length = 140
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
 [build-system]
 requires = ["hatchling>=1.22"]
 build-backend = "hatchling.build"

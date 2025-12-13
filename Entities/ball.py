@@ -1,4 +1,3 @@
-import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 from SimpleGUICS2Pygame.simpleguics2pygame import Canvas
 
 from Game_Control.Vector import Vector

@@ -1,6 +1,7 @@
 import math
 from typing import Any
 
+
 # The Vector class
 class Vector:
 
